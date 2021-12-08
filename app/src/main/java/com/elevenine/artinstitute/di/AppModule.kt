@@ -4,6 +4,8 @@ import android.app.Application
 import android.content.Context
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.BuildConfig
+import com.elevenine.artinstitute.data.api.ArtApi
+import com.elevenine.artinstitute.data.api.ArtApi.Companion.BASE_URL
 import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -11,6 +13,8 @@ import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -61,16 +65,16 @@ class ConfigModule {
 @Module
 class ApiModule {
 
-/*    @Provides
+    @Provides
     @Singleton
-    fun provideApi(moshi: Moshi, okHttpClient: OkHttpClient): UzExApi {
+    fun provideApi(moshi: Moshi, okHttpClient: OkHttpClient): ArtApi {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
             .client(okHttpClient)
             .build()
-        return retrofit.create(UzExApi::class.java)
-    }*/
+        return retrofit.create(ArtApi::class.java)
+    }
 
     @Provides
     fun provideOkHttpClient(@AppContext context: Context): OkHttpClient {
