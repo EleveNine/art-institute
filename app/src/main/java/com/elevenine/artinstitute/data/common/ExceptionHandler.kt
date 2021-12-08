@@ -39,7 +39,7 @@ fun Exception.toApiError(@StringRes errorTitleResId: Int = R.string.error_http):
             errorMessage = this.message
         )
 
-    val parser = ParseHttpErrorCommand()
+    val parser = ErrorBodyParser()
     val errorResponse = parser(this.response()?.errorBody()?.string())
 
     return when {
@@ -74,34 +74,4 @@ fun Exception.toApiError(@StringRes errorTitleResId: Int = R.string.error_http):
  */
 fun Exception.toDatabaseError(@StringRes errorTitleResId: Int = R.string.error_generic_database): DatabaseError {
     return DatabaseError(this, errorTitleResId)
-}
-
-
-/**
- * Class that realises 'Command' pattern to perform Http ErrorBody parsing.
- */
-class ParseHttpErrorCommand {
-
-    /**
-     * Parses the provided Http ErrorBody into [DefaultErrorResponse] object.
-     *
-     * @param body ErrorBody in string type to parse.
-     *
-     * @return an instance of [DefaultErrorResponse] that contains the parsed data.
-     */
-    operator fun invoke(body: String?): DefaultErrorResponse {
-        val defaultErrorResponse = DefaultErrorResponse()
-
-        if (body == null) return defaultErrorResponse
-
-        val jsonObject = JSONObject(body)
-
-        with(defaultErrorResponse) {
-            status = jsonObject.getInt("status")
-            error = jsonObject.getString("error")
-            detail = jsonObject.getString("detail")
-        }
-
-        return defaultErrorResponse
-    }
 }

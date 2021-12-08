@@ -23,7 +23,7 @@ import retrofit2.HttpException
  * @param errorMessageId optional extra errorMessage resId.
  *
  * @param errorMessage optional extra string value to act as an error description. Usually it
- * contains a message obtained from [DefaultErrorResponse] parsed by [ParseHttpErrorCommand].
+ * contains a message obtained from [DefaultErrorResponse] parsed by [ErrorBodyParser].
  */
 open class BaseError(
     var internalException: Throwable,
@@ -48,7 +48,7 @@ open class BaseError(
  * @param errorMessageId optional extra errorMessage resId.
  *
  * @param errorMessage optional extra string value to act as an error description. Usually it
- * contains a message obtained from [DefaultErrorResponse] parsed by [ParseHttpErrorCommand].
+ * contains a message obtained from [DefaultErrorResponse] parsed by [ErrorBodyParser].
  */
 class ApiError(
     exception: HttpException,
@@ -77,7 +77,7 @@ class ApiError(
  * @param errorMessageId optional extra errorMessage resId.
  *
  * @param errorMessage optional extra string value to act as an error description. Usually it
- * contains a message obtained from [DefaultErrorResponse] parsed by [ParseHttpErrorCommand].
+ * contains a message obtained from [DefaultErrorResponse] parsed by [ErrorBodyParser].
  */
 class ServerError(
     exception: HttpException,
