@@ -13,3 +13,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/db_schemas/com.elevenine.artinstitute.data.database.AppDatabase/1.json
