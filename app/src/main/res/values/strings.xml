@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Art Institute App</string>
+    <string name="error_http">An error occurred when connecting to the server</string>
+    <string name="error_generic_database">An error occurred while fetching data from the local database</string>
+    <string name="error_unknown">Unknown error</string>
+    <string name="error_empty_data">There is no data</string>
+    <string name="error_unable_to_connect">Unable to connect to the server</string>
+    <string name="error_unknown_http">An error occured connecting to api</string>
+    <string name="error_critical_server_connection">Unable to connect to the server</string>
 </resources>
