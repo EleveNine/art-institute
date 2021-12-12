@@ -11,6 +11,8 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -29,31 +31,21 @@ import javax.inject.Singleton
 annotation class AppContext
 
 @Module(
-    includes = [DatabaseModule::class, UseCaseBindModule::class, RepositoryBindModule::class]
+    includes = [
+        ApiModule::class,
+        ConfigModule::class,
+        DatabaseModule::class,
+        UseCaseBindModule::class,
+        RepositoryBindModule::class
+    ]
 )
+@InstallIn(SingletonComponent::class)
 class AppModule {
 
-    /**
-     * Provides the application context.
-     */
-    @Provides
-    @AppContext
-    fun provideAppContext(application: Application): Context = application.applicationContext
-
-    /**
-     * Singleton annotation isn't necessary since Application instance is unique but is here for
-     * convention. In general, providing Activity, Fragment, BroadcastReceiver, etc does not require
-     * them to be scoped since they are the components being injected and their instance is unique.
-     *
-     * However, having a scope annotation makes the module easier to read. We wouldn't have to look
-     * at what is being provided in order to understand its scope.
-     */
-    @Singleton
-    @Provides
-    fun application(app: App): Application = app
 }
 
 @Module
+@InstallIn(SingletonComponent::class)
 class ConfigModule {
 
 /*    @Provides
@@ -63,6 +55,7 @@ class ConfigModule {
 }
 
 @Module
+@InstallIn(SingletonComponent::class)
 class ApiModule {
 
     @Provides
