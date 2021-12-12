@@ -8,6 +8,6 @@ import dagger.Module
  */
 
 @Module
-interface InteractorBindModule {
+interface UseCaseBindModule {
 
 }

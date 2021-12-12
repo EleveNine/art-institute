@@ -29,7 +29,7 @@ import javax.inject.Singleton
 annotation class AppContext
 
 @Module(
-    includes = [DatabaseModule::class, InteractorBindModule::class, RepositoryBindModule::class]
+    includes = [DatabaseModule::class, UseCaseBindModule::class, RepositoryBindModule::class]
 )
 class AppModule {
 
