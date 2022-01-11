@@ -4,6 +4,8 @@ import com.squareup.moshi.Json
 
 class ArtworkDto(
     var id: Int?,
+    @Json(name = "image_id")
+    var imageId: String?,
     var title: String?,
     @Json(name = "main_reference_number")
     var mainReferenceNumber: String?,

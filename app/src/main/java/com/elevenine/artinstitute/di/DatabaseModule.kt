@@ -3,6 +3,7 @@ package com.elevenine.artinstitute.di
 import android.content.Context
 import androidx.room.Room
 import com.elevenine.artinstitute.data.database.AppDatabase
+import com.elevenine.artinstitute.data.database.dao.ArtworkDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -20,4 +21,8 @@ class DatabaseModule {
             .databaseBuilder(context, AppDatabase::class.java, "art_database.db")
             .build()
     }
+
+    @Provides
+    @Singleton
+    fun provideArtworkDao(appDatabase: AppDatabase): ArtworkDao = appDatabase.artworkDao()
 }
