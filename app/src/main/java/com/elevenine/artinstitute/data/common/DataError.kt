@@ -129,7 +129,7 @@ class UnknownError(
 
 
 class EmptyDataError(
-    exception: Throwable,
+    exception: Throwable = NullPointerException(),
     @StringRes errorTitleId: Int? = null,
     errorMessage: String? = null,
 ) : BaseError(

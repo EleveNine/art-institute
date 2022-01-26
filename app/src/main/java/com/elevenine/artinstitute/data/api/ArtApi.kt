@@ -20,7 +20,7 @@ interface ArtApi {
     }
 
     @GET("artworks")
-    fun getArtworksByPage(
+    suspend fun getArtworksByPage(
         @Query("page") pageNumber: Int,
         @Query("fields") fields: String = DEFAULT_ARTWORK_FIELDS
     ): Base<List<ArtworkDto>>

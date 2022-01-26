@@ -1,34 +1,30 @@
 package com.elevenine.artinstitute.di
 
-import android.app.Application
 import android.content.Context
-import com.elevenine.artinstitute.App
+import com.chuckerteam.chucker.api.ChuckerCollector
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.chuckerteam.chucker.api.RetentionManager
 import com.elevenine.artinstitute.BuildConfig
 import com.elevenine.artinstitute.data.api.ArtApi
 import com.elevenine.artinstitute.data.api.ArtApi.Companion.BASE_URL
-import com.readystatesoftware.chuck.ChuckInterceptor
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Qualifier
 import javax.inject.Singleton
 
 /**
  * @author Sherzod Nosirov
  * @since 08.12.2021
  */
-
-@Qualifier
-@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
-annotation class AppContext
 
 @Module(
     includes = [
@@ -70,11 +66,22 @@ class ApiModule {
     }
 
     @Provides
-    fun provideOkHttpClient(@AppContext context: Context): OkHttpClient {
+    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
 
         if (BuildConfig.DEBUG) {
-            okHttpClientBuilder.addInterceptor(ChuckInterceptor(context))
+            val chuckerCollector = ChuckerCollector(
+                context = context,
+                // Toggles visibility of the push notification
+                showNotification = true,
+                // Allows to customize the retention period of collected data
+                retentionPeriod = RetentionManager.Period.ONE_DAY
+            )
+            val chuckerInterceptor = ChuckerInterceptor.Builder(context)
+                .collector(chuckerCollector)
+                .build()
+
+            okHttpClientBuilder.addInterceptor(chuckerInterceptor)
 
             val interceptor = HttpLoggingInterceptor()
             interceptor.level = HttpLoggingInterceptor.Level.BODY

@@ -17,7 +17,7 @@ class ArtworkDtoEntityMapper(private val imageIiifPrefix: String) :
             ArtworkEntity(
                 id ?: 0,
                 imageId ?: "",
-                imageIiifPrefix + imageId + IIIF_PARAMS_PATH,
+                "$imageIiifPrefix/$imageId$IIIF_PARAMS_PATH",
                 title ?: "",
                 mainReferenceNumber ?: "",
                 dateDisplay ?: "",

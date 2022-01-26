@@ -7,8 +7,10 @@ import com.elevenine.artinstitute.data.common.toDatabaseError
 import com.elevenine.artinstitute.data.database.dao.ArtworkDao
 import com.elevenine.artinstitute.data.database.entity.ArtworkEntity
 import com.elevenine.artinstitute.domain.mapper.ArtworkDtoEntityMapper
+import com.elevenine.artinstitute.domain.mapper.ArtworkEntityUiMapper
 import com.elevenine.artinstitute.domain.mapper.base.ListMapperImpl
 import com.elevenine.artinstitute.domain.repository.ArtResourceRepository
+import com.elevenine.artinstitute.ui.model.Artwork
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import uz.uzex.uzexmoney.di.IoDispatcher
@@ -22,6 +24,7 @@ import javax.inject.Inject
 class ArtResourceRepositoryImpl @Inject constructor(
     private val artApi: ArtApi,
     private val artworkDao: ArtworkDao,
+    private val artworkEntityUiMapper: ArtworkEntityUiMapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ArtResourceRepository {
 
@@ -47,6 +50,19 @@ class ArtResourceRepositoryImpl @Inject constructor(
             try {
                 artworkDao.insertArtworks(artworkList)
                 return@withContext DataResult.OnSuccess(Unit)
+            } catch (e: Exception) {
+                return@withContext DataResult.OnError(e.toDatabaseError())
+            }
+        }
+    }
+
+    override suspend fun getCachedArtworks(): DataResult<List<Artwork>> {
+        return withContext(ioDispatcher) {
+            try {
+                val list = artworkDao.getArtworks()
+                return@withContext DataResult.OnSuccess(
+                    ListMapperImpl(artworkEntityUiMapper).map(list)
+                )
             } catch (e: Exception) {
                 return@withContext DataResult.OnError(e.toDatabaseError())
             }

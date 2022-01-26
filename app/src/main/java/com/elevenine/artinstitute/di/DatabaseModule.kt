@@ -7,6 +7,7 @@ import com.elevenine.artinstitute.data.database.dao.ArtworkDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -16,7 +17,7 @@ class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@AppContext context: Context): AppDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room
             .databaseBuilder(context, AppDatabase::class.java, "art_database.db")
             .build()
