@@ -24,6 +24,7 @@ import javax.inject.Inject
 class ArtResourceRepositoryImpl @Inject constructor(
     private val artApi: ArtApi,
     private val artworkDao: ArtworkDao,
+    private val artworkDtoEntityMapperFactory: ArtworkDtoEntityMapper.Factory,
     private val artworkEntityUiMapper: ArtworkEntityUiMapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) : ArtResourceRepository {
@@ -34,7 +35,7 @@ class ArtResourceRepositoryImpl @Inject constructor(
             try {
                 val result = artApi.getArtworksByPage(pageNumber)
 
-                val artworkDtoEntityMapper = ArtworkDtoEntityMapper(result.config.iiifUrl ?: "")
+                val artworkDtoEntityMapper = artworkDtoEntityMapperFactory.create(result.config.iiifUrl ?: "")
 
                 return@withContext DataResult.OnSuccess(
                     ListMapperImpl(artworkDtoEntityMapper).map(result.data)
