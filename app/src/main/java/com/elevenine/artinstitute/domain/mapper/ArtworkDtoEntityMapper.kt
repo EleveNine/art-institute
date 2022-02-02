@@ -13,29 +13,38 @@ import dagger.assisted.AssistedInject
  */
 
 class ArtworkDtoEntityMapper @AssistedInject constructor(
-    @Assisted("imageIiifPrefix") private val imageIiifPrefix: String
+    @Assisted(ASSISTED_INJECT_FIELD_IIIF_PREFIX) private val imageIiifPrefix: String
 ) : Mapper<ArtworkDto, ArtworkEntity> {
+
+    companion object {
+        const val IIIF_PARAMS_PATH = "/full/843,/0/default.jpg"
+        const val ASSISTED_INJECT_FIELD_IIIF_PREFIX = "imageIiifPrefix"
+    }
 
     override fun map(input: ArtworkDto): ArtworkEntity {
         return with(input) {
             ArtworkEntity(
-                id ?: 0,
+                id ?: -1,
                 imageId ?: "",
                 "$imageIiifPrefix/$imageId$IIIF_PARAMS_PATH",
                 title ?: "",
                 mainReferenceNumber ?: "",
                 dateDisplay ?: "",
-                artistDisplay ?: ""
+                artistDisplay ?: "",
+                artistId ?: -1,
+                artworkTypeId ?: "",
+                artworkTypeTitle ?: "",
             )
         }
     }
 
-    companion object {
-        const val IIIF_PARAMS_PATH = "/full/843,/0/default.jpg"
-    }
-
+    /**
+     * Due to the necessity to pass the imageIiifPrefix param to the constructor of
+     * [ArtworkDtoEntityMapper] to properly create image urls, it is necessary to implement Dagger's
+     * AssistedFactory.
+     */
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted("imageIiifPrefix") imageIiifPrefix: String): ArtworkDtoEntityMapper
+        fun create(@Assisted(ASSISTED_INJECT_FIELD_IIIF_PREFIX) imageIiifPrefix: String): ArtworkDtoEntityMapper
     }
 }

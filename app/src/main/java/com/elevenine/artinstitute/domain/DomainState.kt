@@ -11,7 +11,7 @@ sealed class DomainState<out R> {
 
     data class Success<out T>(val data: T) : DomainState<T>()
 
-    data class Error(val error: BaseError) : DomainState<Nothing>()
+    data class Error<out T>(val error: BaseError, val data: T? = null) : DomainState<T>()
 
     data class Loading(val message: String? = null) : DomainState<Nothing>()
 }

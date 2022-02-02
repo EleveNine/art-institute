@@ -32,6 +32,7 @@ import javax.inject.Singleton
         ConfigModule::class,
         DatabaseModule::class,
         UseCaseBindModule::class,
+        InteractorBindModule::class,
         RepositoryBindModule::class
     ]
 )

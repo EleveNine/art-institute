@@ -4,57 +4,54 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.ItemArtworkBinding
-import com.elevenine.artinstitute.ui.model.Artwork
+import com.elevenine.artinstitute.databinding.ItemArtworkLoadingBinding
+import com.elevenine.artinstitute.ui.model.ArtworkListItem
 
 /**
  * @author Sherzod Nosirov
  * @since 26.01.2022
  */
 
-class ArtListAdapter : ListAdapter<Artwork, ArtworkVH>(ArtworkDiffUtils()) {
+class ArtListAdapter : ListAdapter<ArtworkListItem, ArtworkListItemVH>(ArtworkDiffUtils()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtworkVH {
-        return ArtworkVH(
-            ItemArtworkBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ArtworkListItemVH {
+        return when (viewType) {
+            R.layout.item_artwork -> ArtworkVH(
+                ItemArtworkBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
             )
-        )
+            else -> ArtworkLoadingVH(
+                ItemArtworkLoadingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+            )
+        }
     }
 
-    override fun onBindViewHolder(holder: ArtworkVH, position: Int) {
+    override fun getItemViewType(position: Int): Int {
+        return currentList[position].viewType
+    }
+
+    override fun onBindViewHolder(holder: ArtworkListItemVH, position: Int) {
         holder.onBind(currentList[position])
     }
-
 }
 
-class ArtworkDiffUtils : DiffUtil.ItemCallback<Artwork>() {
+class ArtworkDiffUtils : DiffUtil.ItemCallback<ArtworkListItem>() {
 
-    override fun areItemsTheSame(oldItem: Artwork, newItem: Artwork): Boolean {
+    override fun areItemsTheSame(oldItem: ArtworkListItem, newItem: ArtworkListItem): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Artwork, newItem: Artwork): Boolean {
-        return oldItem == newItem
+    override fun areContentsTheSame(oldItem: ArtworkListItem, newItem: ArtworkListItem): Boolean {
+        return oldItem.callDataEquals(newItem)
     }
 
-}
-
-class ArtworkVH(private val binding: ItemArtworkBinding) : RecyclerView.ViewHolder(binding.root) {
-
-    private val context = binding.root.context
-
-    fun onBind(artwork: Artwork) {
-        with(artwork) {
-            Glide.with(context)
-                .load(imageUrl)
-                .into(binding.imgArt)
-
-            binding.tvTitle.text = artwork.title
-        }
-    }
 }

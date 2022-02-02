@@ -13,7 +13,10 @@ import javax.inject.Inject
 class ArtworkEntityUiMapper @Inject constructor() : Mapper<ArtworkEntity, Artwork> {
     override fun map(input: ArtworkEntity): Artwork {
         return with(input) {
-            Artwork(id, imageId, imageUrl, title, mainReferenceNumber, dateDisplay, artistDisplay)
+            Artwork(
+                id, imageId, imageUrl, title, mainReferenceNumber, dateDisplay,
+                artistDisplay, artistId, artworkTypeId, artworkTypeTitle,
+            )
         }
     }
 }

@@ -7,8 +7,8 @@ package com.elevenine.artinstitute.data.common
 
 sealed class DataResult<out R> {
 
-    data class OnSuccess<out T>(val data: T) : DataResult<T>()
+    data class Success<out T>(val data: T) : DataResult<T>()
 
-    data class OnError(val error: BaseError) : DataResult<Nothing>()
+    data class Error(val error: BaseError) : DataResult<Nothing>()
 }
 

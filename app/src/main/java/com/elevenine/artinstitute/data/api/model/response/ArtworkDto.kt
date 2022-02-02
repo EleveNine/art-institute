@@ -12,5 +12,11 @@ class ArtworkDto(
     @Json(name = "date_display")
     var dateDisplay: String?,
     @Json(name = "artist_display")
-    var artistDisplay: String?
+    var artistDisplay: String?,
+    @Json(name = "artist_id")
+    var artistId: Long?,
+    @Json(name = "artwork_type_id")
+    var artworkTypeId: String?,
+    @Json(name = "artwork_type_title")
+    var artworkTypeTitle: String?
 )

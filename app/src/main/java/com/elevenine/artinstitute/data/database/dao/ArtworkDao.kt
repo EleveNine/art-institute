@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.elevenine.artinstitute.data.database.entity.ArtworkEntity
+import kotlinx.coroutines.flow.Flow
 
 /**
  * @author Sherzod Nosirov
@@ -23,4 +24,11 @@ interface ArtworkDao {
         """
     )
     fun getArtworks(): List<ArtworkEntity>
+
+    @Query(
+        """
+            SELECT * FROM artworks
+        """
+    )
+    fun getArtworksFlow(): Flow<List<ArtworkEntity>>
 }

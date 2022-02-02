@@ -3,6 +3,7 @@ package com.elevenine.artinstitute.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 
 /**
  * @author Sherzod Nosirov
@@ -21,5 +22,11 @@ class ArtworkEntity(
     @ColumnInfo(name = "date_display")
     var dateDisplay: String,
     @ColumnInfo(name = "artist_display")
-    var artistDisplay: String
+    var artistDisplay: String,
+    @ColumnInfo(name = "artist_id")
+    var artistId: Long,
+    @ColumnInfo(name = "artwork_type_id")
+    var artworkTypeId: String,
+    @ColumnInfo(name = "artwork_type_title")
+    var artworkTypeTitle: String
 )

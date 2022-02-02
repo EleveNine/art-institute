@@ -1,7 +1,9 @@
 package com.elevenine.artinstitute.di
 
-import com.elevenine.artinstitute.domain.use_case.RequestNewArtworkPageUseCase
-import com.elevenine.artinstitute.domain.use_case.RequestNewArtworkPageUseCaseImpl
+import com.elevenine.artinstitute.domain.use_case.GetCachedArtworksFlowUseCase
+import com.elevenine.artinstitute.domain.use_case.GetCachedArtworksFlowUseCaseImpl
+import com.elevenine.artinstitute.domain.use_case.RequestAndCacheNewArtworkPageUseCase
+import com.elevenine.artinstitute.domain.use_case.RequestAndCacheNewArtworkPageUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -17,5 +19,8 @@ import dagger.hilt.components.SingletonComponent
 interface UseCaseBindModule {
 
     @Binds
-    fun bindRequestNewArtworkPageUseCase(impl: RequestNewArtworkPageUseCaseImpl): RequestNewArtworkPageUseCase
+    fun bindRequestNewArtworkPageUseCase(impl: RequestAndCacheNewArtworkPageUseCaseImpl): RequestAndCacheNewArtworkPageUseCase
+
+    @Binds
+    fun bindGetCachedArtworksFlowUseCase(impl: GetCachedArtworksFlowUseCaseImpl): GetCachedArtworksFlowUseCase
 }

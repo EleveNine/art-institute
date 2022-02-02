@@ -2,8 +2,12 @@ package com.elevenine.artinstitute.ui.list
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elevenine.artinstitute.R
@@ -11,6 +15,7 @@ import com.elevenine.artinstitute.databinding.FragmentArtListBinding
 import com.elevenine.artinstitute.ui.list.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
 import com.elevenine.artinstitute.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 
 /**
@@ -30,6 +35,10 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // if StateFlow is observed from the ViewModel use 'repeatOnLifecycle' method to start
+        // or restart the coroutine when the Fragment is STARTED and stop it when the Fragment is
+        // in the STOPPED state.
+        // See https://medium.com/androiddevelopers/repeatonlifecycle-api-design-story-8670d1a7d333
         viewModel.uiState.observe(this, {
             handleUiState(it)
         })
@@ -77,5 +86,10 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
 
     private fun handleUiState(uiState: ArtListUiState) {
         artworkAdapter?.submitList(uiState.artworks)
+        binding.pbInitial.visibility = if (uiState.isInitialLoading) View.VISIBLE else View.GONE
+
+        if (uiState.showErrorToast) {
+            Toast.makeText(requireContext(), "An error occurre", Toast.LENGTH_SHORT).show()
+        }
     }
 }
