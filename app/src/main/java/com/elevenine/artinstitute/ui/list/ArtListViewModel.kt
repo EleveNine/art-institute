@@ -1,6 +1,5 @@
 package com.elevenine.artinstitute.ui.list
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,7 +8,8 @@ import com.elevenine.artinstitute.domain.DomainState
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -31,42 +31,39 @@ class ArtListViewModel @Inject constructor(private val fetchPagedArtworksInterac
             fetchPagedArtworksInteractor.initInteractor()
         }
 
-        viewModelScope.launch {
-            fetchPagedArtworksInteractor.artworkItemsFlow.collect { domainState ->
-                when (domainState) {
-                    is DomainState.Error -> {
-                        _uiState.postValue(
-                            ArtListUiState(
-                                domainState.data ?: emptyList(),
-                                isInitialLoading = false,
-                                showErrorToast = true
-                            )
+        fetchPagedArtworksInteractor.artworkItemsFlow.onEach { domainState ->
+            when (domainState) {
+                is DomainState.Error -> {
+                    _uiState.postValue(
+                        ArtListUiState(
+                            domainState.data ?: emptyList(),
+                            isInitialLoading = false,
+                            showErrorToast = true
                         )
-                    }
-                    is DomainState.Success -> {
-                        _uiState.postValue(
-                            ArtListUiState(
-                                domainState.data,
-                                isInitialLoading = false,
-                                showErrorToast = false
-                            )
+                    )
+                }
+                is DomainState.Success -> {
+                    _uiState.postValue(
+                        ArtListUiState(
+                            domainState.data,
+                            isInitialLoading = false,
+                            showErrorToast = false
                         )
-                    }
-                    is DomainState.Loading -> {
-                        val prevState = _uiState.value
-                        val newValue = prevState?.copy(isInitialLoading = true)
-                        newValue?.let { _uiState.postValue(it) }
-                    }
+                    )
+                }
+                is DomainState.Loading -> {
+                    val prevState = _uiState.value
+                    val newValue = prevState?.copy(isInitialLoading = true)
+                    newValue?.let { _uiState.postValue(it) }
                 }
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
     fun requestNewPage() {
         viewModelScope.launch {
             fetchPagedArtworksInteractor.requestNextPage()
         }
-
     }
 
     companion object {
