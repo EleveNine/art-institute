@@ -1,21 +1,17 @@
-package com.elevenine.artinstitute.ui.list
+package com.elevenine.artinstitute.ui.artworks
 
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentArtListBinding
-import com.elevenine.artinstitute.ui.list.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
+import com.elevenine.artinstitute.ui.artworks.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
 import com.elevenine.artinstitute.utils.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 
 
 /**

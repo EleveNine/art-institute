@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.elevenine.artinstitute.data.database.AppDatabase
 import com.elevenine.artinstitute.data.database.dao.ArtworkDao
+import com.elevenine.artinstitute.data.database.dao.CategoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +27,8 @@ class DatabaseModule {
     @Provides
     @Singleton
     fun provideArtworkDao(appDatabase: AppDatabase): ArtworkDao = appDatabase.artworkDao()
+
+    @Provides
+    @Singleton
+    fun provideCategoriesDao(appDatabase: AppDatabase): CategoryDao = appDatabase.categoryDao()
 }

@@ -1,9 +1,6 @@
 package com.elevenine.artinstitute.di
 
-import com.elevenine.artinstitute.domain.use_case.GetCachedArtworksFlowUseCase
-import com.elevenine.artinstitute.domain.use_case.GetCachedArtworksFlowUseCaseImpl
-import com.elevenine.artinstitute.domain.use_case.RequestAndCacheNewArtworkPageUseCase
-import com.elevenine.artinstitute.domain.use_case.RequestAndCacheNewArtworkPageUseCaseImpl
+import com.elevenine.artinstitute.domain.use_case.*
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -23,4 +20,10 @@ interface UseCaseBindModule {
 
     @Binds
     fun bindGetCachedArtworksFlowUseCase(impl: GetCachedArtworksFlowUseCaseImpl): GetCachedArtworksFlowUseCase
+
+    @Binds
+    fun bindFetchCategoriesUseCase(impl: FetchCategoriesUseCaseImpl): FetchCategoriesAndCacheUseCase
+
+    @Binds
+    fun bindGetCachedCategoriesFlowUseCase(impl: GetCachedCategoriesFlowUseCaseImpl): GetCachedCategoriesFlowUseCase
 }

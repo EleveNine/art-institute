@@ -1,4 +1,4 @@
-package com.elevenine.artinstitute.ui.list
+package com.elevenine.artinstitute.ui.artworks
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

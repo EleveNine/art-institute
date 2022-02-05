@@ -1,4 +1,4 @@
-package com.elevenine.artinstitute.ui.list
+package com.elevenine.artinstitute.ui.artworks
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

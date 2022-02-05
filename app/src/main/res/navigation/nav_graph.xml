@@ -3,12 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/artList">
+    app:startDestination="@id/categories">
 
     <fragment
         android:id="@+id/artList"
-        android:name="com.elevenine.artinstitute.ui.list.ArtListFragment"
+        android:name="com.elevenine.artinstitute.ui.artworks.ArtListFragment"
         android:label="ArtListFragment"
         tools:layout="@layout/fragment_art_list" />
+
+    <fragment
+        android:id="@+id/categories"
+        android:name="com.elevenine.artinstitute.ui.categories.CategoriesFragment"
+        android:label="CategoriesFragment"
+        tools:layout="@layout/fragment_categories" />
 
 </navigation>
