@@ -1,9 +1,11 @@
 package com.elevenine.artinstitute.di
 
+import android.app.Application
 import android.content.Context
 import com.chuckerteam.chucker.api.ChuckerCollector
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.chuckerteam.chucker.api.RetentionManager
+import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.BuildConfig
 import com.elevenine.artinstitute.data.api.ArtApi
 import com.elevenine.artinstitute.data.api.ArtApi.Companion.BASE_URL
@@ -11,20 +13,22 @@ import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
+import javax.inject.Qualifier
 import javax.inject.Singleton
 
 /**
  * @author Sherzod Nosirov
  * @since 08.12.2021
  */
+
+@Qualifier
+@kotlin.annotation.Retention(AnnotationRetention.RUNTIME)
+annotation class AppContext
 
 @Module(
     includes = [
@@ -33,16 +37,32 @@ import javax.inject.Singleton
         DatabaseModule::class,
         UseCaseBindModule::class,
         InteractorBindModule::class,
-        RepositoryBindModule::class
+        RepositoryBindModule::class,
+        DispatcherModule::class,
     ]
 )
-@InstallIn(SingletonComponent::class)
 class AppModule {
+    /**
+     * Provides the application context.
+     */
+    @Provides
+    @AppContext
+    fun provideAppContext(application: Application): Context = application.applicationContext
 
+    /**
+     * Singleton annotation isn't necessary since Application instance is unique but is here for
+     * convention. In general, providing Activity, Fragment, BroadcastReceiver, etc does not require
+     * them to be scoped since they are the components being injected and their instance is unique.
+     *
+     * However, having a scope annotation makes the module easier to read. We wouldn't have to look
+     * at what is being provided in order to understand its scope.
+     */
+    @Singleton
+    @Provides
+    fun application(app: App): Application = app
 }
 
 @Module
-@InstallIn(SingletonComponent::class)
 class ConfigModule {
 
 /*    @Provides
@@ -52,7 +72,6 @@ class ConfigModule {
 }
 
 @Module
-@InstallIn(SingletonComponent::class)
 class ApiModule {
 
     @Provides
@@ -67,7 +86,7 @@ class ApiModule {
     }
 
     @Provides
-    fun provideOkHttpClient(@ApplicationContext context: Context): OkHttpClient {
+    fun provideOkHttpClient(@AppContext context: Context): OkHttpClient {
         val okHttpClientBuilder = OkHttpClient.Builder()
 
         if (BuildConfig.DEBUG) {

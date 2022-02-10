@@ -6,6 +6,7 @@ import com.elevenine.artinstitute.data.common.toApiError
 import com.elevenine.artinstitute.data.common.toDatabaseError
 import com.elevenine.artinstitute.data.database.dao.ArtworkDao
 import com.elevenine.artinstitute.data.database.entity.ArtworkEntity
+import com.elevenine.artinstitute.di.IoDispatcher
 import com.elevenine.artinstitute.domain.mapper.ArtworkDtoEntityMapper
 import com.elevenine.artinstitute.domain.mapper.ArtworkEntityUiMapper
 import com.elevenine.artinstitute.domain.mapper.base.ListMapperImpl
@@ -15,7 +16,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
-import uz.uzex.uzexmoney.di.IoDispatcher
 import javax.inject.Inject
 
 /**
@@ -43,7 +43,8 @@ class ArtResourceRepositoryImpl @Inject constructor(
 
                 //todo check if the last page is reached -> return DataResult.OnError with EmptyDataError
 
-                val artworkDtoEntityMapper = artworkDtoEntityMapperFactory.create(result.config.iiifUrl ?: "")
+                val artworkDtoEntityMapper =
+                    artworkDtoEntityMapperFactory.create(result.config.iiifUrl ?: "")
 
                 return@withContext DataResult.Success(
                     ListMapperImpl(artworkDtoEntityMapper).map(result.data)

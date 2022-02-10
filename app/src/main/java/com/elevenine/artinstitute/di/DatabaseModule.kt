@@ -7,18 +7,14 @@ import com.elevenine.artinstitute.data.database.dao.ArtworkDao
 import com.elevenine.artinstitute.data.database.dao.CategoryDao
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
 class DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+    fun provideDatabase(@AppContext context: Context): AppDatabase {
         return Room
             .databaseBuilder(context, AppDatabase::class.java, "art_database.db")
             .build()

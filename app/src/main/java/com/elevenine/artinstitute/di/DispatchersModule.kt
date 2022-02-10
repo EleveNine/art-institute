@@ -1,9 +1,7 @@
-package uz.uzex.uzexmoney.di
+package com.elevenine.artinstitute.di
 
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Qualifier
@@ -26,7 +24,6 @@ annotation class IoDispatcher
 annotation class MainDispatcher
 
 @Module
-@InstallIn(SingletonComponent::class)
 class DispatcherModule {
     @DefaultDispatcher
     @Provides

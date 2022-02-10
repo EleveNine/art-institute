@@ -1,17 +1,23 @@
 package com.elevenine.artinstitute
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.elevenine.artinstitute.di.AppComponent
+import com.elevenine.artinstitute.di.DaggerAppComponent
 
-@HiltAndroidApp
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
 
-        // Instance of the AppComponent that will be used by all the Activities in the project
-/*
-        FirebaseApp.initializeApp(this)*/
+        sAppComponent = DaggerAppComponent.builder().app(this).build()
+        sAppComponent.inject(this)
+    }
+
+    companion object {
+
+        private lateinit var sAppComponent: AppComponent
+
+        fun getAppComponent(): AppComponent = sAppComponent
     }
 
 }

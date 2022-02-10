@@ -6,8 +6,6 @@ import com.elevenine.artinstitute.domain.repository.ArtResourceRepository
 import com.elevenine.artinstitute.domain.repository.CategoryRepository
 import dagger.Binds
 import dagger.Module
-import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
 
 /**
  * @author Sherzod Nosirov
@@ -15,7 +13,6 @@ import dagger.hilt.components.SingletonComponent
  */
 
 @Module
-@InstallIn(SingletonComponent::class)
 interface RepositoryBindModule {
 
     @Binds

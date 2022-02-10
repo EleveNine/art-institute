@@ -11,7 +11,6 @@ import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentArtListBinding
 import com.elevenine.artinstitute.ui.artworks.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
 import com.elevenine.artinstitute.utils.viewBinding
-import dagger.hilt.android.AndroidEntryPoint
 
 
 /**
@@ -19,7 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
  * @since 08.12.2021
  */
 
-@AndroidEntryPoint
 class ArtListFragment : Fragment(R.layout.fragment_art_list) {
 
     private val viewModel by viewModels<ArtListViewModel>()

@@ -4,7 +4,6 @@ plugins {
     id 'kotlin-kapt'
     id 'kotlin-parcelize'
     id 'androidx.navigation.safeargs'
-    id 'dagger.hilt.android.plugin'
 }
 
 android {
@@ -95,8 +94,12 @@ dependencies {
     testImplementation 'org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt'
 
     // Dependency Injection (Dagger Hilt)
-    implementation "com.google.dagger:hilt-android:2.38.1"
-    kapt "com.google.dagger:hilt-compiler:2.38.1"
+/*    implementation "com.google.dagger:hilt-android:2.38.1"
+    kapt "com.google.dagger:hilt-compiler:2.38.1"*/
+
+    // Dependency Injection (Dagger 2)
+    implementation 'com.google.dagger:dagger:2.38.1'
+    kapt 'com.google.dagger:dagger-compiler:2.38.1'
 
     // Api Service tools (Retrofit 2)
     implementation 'com.squareup.okhttp3:okhttp:4.7.2'

@@ -1,29 +1,40 @@
 package com.elevenine.artinstitute.ui.categories
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentCategoriesBinding
 import com.elevenine.artinstitute.utils.viewBinding
-import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 /**
  * @author Sherzod Nosirov
  * @since 05.02.2022
  */
 
-@AndroidEntryPoint
 class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
-    private val viewModel by viewModels<CategoriesViewModel>()
+    @Inject
+    lateinit var viewModelFactory: CategoriesViewModelFactory
+
+    private val viewModel: CategoriesViewModel by viewModels {
+        viewModelFactory
+    }
 
     private val binding by viewBinding(FragmentCategoriesBinding::bind)
 
     private var categoriesAdapter: CategoriesAdapter? = null
+
+    override fun onAttach(context: Context) {
+        App.getAppComponent().inject(this)
+        super.onAttach(context)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

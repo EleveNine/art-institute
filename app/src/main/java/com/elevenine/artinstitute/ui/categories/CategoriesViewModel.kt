@@ -1,20 +1,16 @@
 package com.elevenine.artinstitute.ui.categories
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.util.Log
+import androidx.lifecycle.*
 import com.elevenine.artinstitute.domain.DomainState
 import com.elevenine.artinstitute.domain.interactor.GetCategoriesInteractor
 import com.elevenine.artinstitute.ui.model.Category
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@HiltViewModel
-class CategoriesViewModel @Inject constructor(private val getCategoriesInteractor: GetCategoriesInteractor) :
+class CategoriesViewModel(private val getCategoriesInteractor: GetCategoriesInteractor) :
     ViewModel() {
 
     private val _uiState = MutableLiveData<CategoriesUiState>()
@@ -58,8 +54,21 @@ class CategoriesViewModel @Inject constructor(private val getCategoriesInteracto
     }
 }
 
+
 data class CategoriesUiState(
     val categories: List<Category>,
     val isInitialLoading: Boolean,
     val showErrorToast: Boolean
 )
+
+
+class CategoriesViewModelFactory @Inject constructor(
+    private val getCategoriesInteractor: GetCategoriesInteractor
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        require(modelClass == CategoriesViewModel::class.java)
+        return CategoriesViewModel(getCategoriesInteractor) as T
+    }
+}

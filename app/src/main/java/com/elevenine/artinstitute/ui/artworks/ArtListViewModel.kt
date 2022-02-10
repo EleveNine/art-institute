@@ -7,7 +7,6 @@ import androidx.lifecycle.viewModelScope
 import com.elevenine.artinstitute.domain.DomainState
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -18,7 +17,6 @@ import javax.inject.Inject
  * @since 12.12.2021
  */
 
-@HiltViewModel
 class ArtListViewModel @Inject constructor(private val fetchPagedArtworksInteractor: FetchPagedArtworksInteractor) :
     ViewModel() {
 
