@@ -1,24 +1,25 @@
 package com.elevenine.artinstitute.ui.artworks
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.elevenine.artinstitute.domain.DomainState
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * @author Sherzod Nosirov
  * @since 12.12.2021
  */
 
-class ArtListViewModel @Inject constructor(private val fetchPagedArtworksInteractor: FetchPagedArtworksInteractor) :
-    ViewModel() {
+class ArtListViewModel(
+    private val categoryId: Long,
+    private val fetchPagedArtworksInteractor: FetchPagedArtworksInteractor
+) : ViewModel() {
 
     private val _uiState = MutableLiveData<ArtListUiState>()
     val uiState: LiveData<ArtListUiState>
@@ -74,3 +75,22 @@ data class ArtListUiState(
     val isInitialLoading: Boolean,
     val showErrorToast: Boolean
 )
+
+
+class ArtListViewModelFactory @AssistedInject constructor(
+    @Assisted("category_id") private val categoryId: Long,
+    private val fetchPagedArtworksInteractor: FetchPagedArtworksInteractor
+) : ViewModelProvider.Factory {
+
+    @Suppress("UNCHECKED_CAST")
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        require(modelClass == ArtListViewModel::class.java)
+        return ArtListViewModel(categoryId, fetchPagedArtworksInteractor) as T
+    }
+
+    @AssistedFactory
+    interface Creator {
+
+        fun create(@Assisted("category_id") categoryId: Long): ArtListViewModelFactory
+    }
+}

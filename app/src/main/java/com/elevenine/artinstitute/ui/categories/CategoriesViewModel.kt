@@ -1,6 +1,5 @@
 package com.elevenine.artinstitute.ui.categories
 
-import android.util.Log
 import androidx.lifecycle.*
 import com.elevenine.artinstitute.domain.DomainState
 import com.elevenine.artinstitute.domain.interactor.GetCategoriesInteractor

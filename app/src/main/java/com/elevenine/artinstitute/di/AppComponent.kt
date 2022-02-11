@@ -1,6 +1,7 @@
 package com.elevenine.artinstitute.di
 
 import com.elevenine.artinstitute.App
+import com.elevenine.artinstitute.ui.artworks.ArtListFragment
 import com.elevenine.artinstitute.ui.categories.CategoriesFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -17,7 +18,9 @@ interface AppComponent {
 
     fun inject(app: App)
 
-    fun inject(categoriesFragment: CategoriesFragment)
+    fun inject(fragment: ArtListFragment)
+
+    fun inject(fragment: CategoriesFragment)
 
 
     @Component.Builder
