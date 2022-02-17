@@ -1,8 +1,10 @@
 package com.elevenine.artinstitute.data.api.model.response
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
+@Keep
 class CategoryDto(
     var id: Int?,
     @Json(name = "api_model")

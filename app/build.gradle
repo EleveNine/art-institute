@@ -25,11 +25,27 @@ android {
         }
     }
 
+    signingConfigs {
+        release {
+            storeFile file('keystore.jks')
+            storePassword 'elevenine'
+            keyAlias 'artinstitute'
+            keyPassword 'elevenine'
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // Build signing configuration
+            signingConfig signingConfigs.release
         }
+/*        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }*/
     }
 
     buildFeatures {

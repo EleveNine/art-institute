@@ -1,7 +1,9 @@
 package com.elevenine.artinstitute.data.api.model.response
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
+@Keep
 class ArtworkDto(
     var id: Int?,
     @Json(name = "image_id")

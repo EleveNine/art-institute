@@ -1,5 +1,6 @@
 package com.elevenine.artinstitute.data.api.model.response
 
+import androidx.annotation.Keep
 import com.squareup.moshi.Json
 
 /**
@@ -7,6 +8,7 @@ import com.squareup.moshi.Json
  * @since 08.12.2021
  */
 
+@Keep
 class Base<T>(
     var pagination: Pagination,
     var data: T,
@@ -14,6 +16,7 @@ class Base<T>(
     var config: Config
 )
 
+@Keep
 class Pagination(
     var total: Int?,
     var limit: Int?,
@@ -26,6 +29,7 @@ class Pagination(
     var nextUrl: String?
 )
 
+@Keep
 class Info(
     @Json(name = "license_text")
     var licenseText: String?,
@@ -34,6 +38,7 @@ class Info(
     var version: String?
 )
 
+@Keep
 class Config(
     @Json(name = "iiif_url")
     var iiifUrl: String?,
