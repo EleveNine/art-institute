@@ -39,9 +39,9 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.uiState.observe(this, { state ->
+        viewModel.uiState.observe(this) { state ->
             handleUiState(state)
-        })
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

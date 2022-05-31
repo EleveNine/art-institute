@@ -83,7 +83,7 @@ class ArtListViewModelFactory @AssistedInject constructor(
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         require(modelClass == ArtListViewModel::class.java)
         return ArtListViewModel(categoryId, fetchPagedArtworksInteractor) as T
     }
