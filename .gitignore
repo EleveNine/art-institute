@@ -8,10 +8,14 @@
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+/.idea
+/.gradle
 .DS_Store
 /build
 /captures
 .externalNativeBuild
 .cxx
 local.properties
+android/local.properties
+.android/local.properties
 /app/db_schemas/com.elevenine.artinstitute.data.database.AppDatabase/1.json
