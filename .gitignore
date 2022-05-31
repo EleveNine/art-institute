@@ -16,6 +16,24 @@
 .externalNativeBuild
 .cxx
 local.properties
+#built application files
+*.apk
+*.ap_
+*.aab
+
+# files for the dex VM
+*.dex
+
+# Java class files
+*.class
+
+# generated files
+bin/
+gen/
+.navigation
+captures/
+output.json
+
 android/local.properties
 .android/local.properties
 /app/db_schemas/com.elevenine.artinstitute.data.database.AppDatabase/1.json
