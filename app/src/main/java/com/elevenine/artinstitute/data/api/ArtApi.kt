@@ -1,9 +1,12 @@
 package com.elevenine.artinstitute.data.api
 
+import com.elevenine.artinstitute.data.api.model.request.GetCategorizedArtworksRequest
 import com.elevenine.artinstitute.data.api.model.response.ArtworkDto
 import com.elevenine.artinstitute.data.api.model.response.Base
 import com.elevenine.artinstitute.data.api.model.response.CategoryDto
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 /**
@@ -20,11 +23,12 @@ interface ArtApi {
             "id,image_id,title,artist_id,artist_display,date_display,main_reference_number,artwork_type_id,artwork_type_title"
     }
 
-    @GET("artworks")
-    suspend fun getArtworksByPage(
+    @POST("artworks/search")
+    suspend fun getCategorizedArtworksByPage(
+        @Body requestBody: GetCategorizedArtworksRequest,
         @Query("page") pageNumber: Int,
         @Query("limit") limit: Int,
-        @Query("fields") fields: String = DEFAULT_ARTWORK_FIELDS
+        @Query("fields") fields: String = DEFAULT_ARTWORK_FIELDS,
     ): Base<List<ArtworkDto>>
 
     @GET("artwork-types")

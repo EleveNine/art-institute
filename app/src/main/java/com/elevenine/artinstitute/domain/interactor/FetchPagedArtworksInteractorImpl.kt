@@ -1,7 +1,7 @@
 package com.elevenine.artinstitute.domain.interactor
 
-import com.elevenine.artinstitute.data.common.EmptyDataError
-import com.elevenine.artinstitute.domain.DomainResult
+import com.elevenine.artinstitute.common.EmptyDataError
+import com.elevenine.artinstitute.common.DomainResult
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor.Companion.PAGE_SIZE
 import com.elevenine.artinstitute.domain.use_case.GetNextArtworkPageUseCase
 import com.elevenine.artinstitute.ui.model.Artwork
@@ -77,7 +77,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
         // new actual page index is required for requesting new page of data.
         if (currentPage < artworks.size / PAGE_SIZE) currentPage = artworks.size / PAGE_SIZE
 
-        val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE)
+        val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE, categoryId)
 
         return when (result) {
             is DomainResult.Error -> {
@@ -140,7 +140,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
 
         suspend fun fetchTransactions(): DomainResult<Unit> {
             isLoading = true
-            val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE)
+            val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE, categoryId)
 
             when (result) {
                 is DomainResult.Error -> {

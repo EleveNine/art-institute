@@ -1,7 +1,7 @@
 package com.elevenine.artinstitute.domain.use_case
 
 import com.elevenine.artinstitute.common.toDomainResult
-import com.elevenine.artinstitute.domain.DomainResult
+import com.elevenine.artinstitute.common.DomainResult
 import com.elevenine.artinstitute.domain.mapper.CategoryEntityUiMapper
 import com.elevenine.artinstitute.domain.mapper.base.ListMapperImpl
 import com.elevenine.artinstitute.domain.repository.CategoryRepository

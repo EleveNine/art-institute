@@ -1,4 +1,4 @@
-package com.elevenine.artinstitute.data.common
+package com.elevenine.artinstitute.common
 
 import androidx.annotation.StringRes
 import com.elevenine.artinstitute.R

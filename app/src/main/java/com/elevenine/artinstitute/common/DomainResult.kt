@@ -1,7 +1,6 @@
-package com.elevenine.artinstitute.domain
+package com.elevenine.artinstitute.common
 
 import androidx.lifecycle.ViewModel
-import com.elevenine.artinstitute.data.common.BaseError
 
 /**
  * @author Sherzod Nosirov

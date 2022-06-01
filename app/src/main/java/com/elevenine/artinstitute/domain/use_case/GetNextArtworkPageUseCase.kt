@@ -1,6 +1,6 @@
 package com.elevenine.artinstitute.domain.use_case
 
-import com.elevenine.artinstitute.domain.DomainResult
+import com.elevenine.artinstitute.common.DomainResult
 import com.elevenine.artinstitute.domain.model.DataListPage
 import com.elevenine.artinstitute.ui.model.Artwork
 
@@ -10,5 +10,9 @@ import com.elevenine.artinstitute.ui.model.Artwork
  */
 
 interface GetNextArtworkPageUseCase {
-    suspend operator fun invoke(pageNumber: Int, pageSize: Int): DomainResult<DataListPage<Artwork>>
+    suspend operator fun invoke(
+        pageNumber: Int,
+        pageSize: Int,
+        categoryId: Long
+    ): DomainResult<DataListPage<Artwork>>
 }

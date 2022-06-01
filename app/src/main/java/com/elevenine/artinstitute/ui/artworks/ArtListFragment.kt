@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.elevenine.artinstitute.App
@@ -16,6 +17,7 @@ import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentArtListBinding
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.artworks.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
+import com.elevenine.artinstitute.utils.applyDefaultInsets
 import com.elevenine.artinstitute.utils.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -33,7 +35,8 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
     lateinit var viewModelFactoryCreator: ArtListViewModelFactory.Creator
 
     private val viewModel: ArtListViewModel by viewModels {
-        viewModelFactoryCreator.create(1) //todo add category_id from navigation
+        val args by navArgs<ArtListFragmentArgs>()
+        viewModelFactoryCreator.create(args.categoryId)
     }
 
     private val binding by viewBinding(FragmentArtListBinding::bind)
@@ -72,6 +75,8 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        applyDefaultInsets(binding.root)
+
         val linearLayoutManager = LinearLayoutManager(requireContext())
 
         val recyclerViewOnScrollListener: RecyclerView.OnScrollListener =
@@ -94,7 +99,7 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
                 }
             }
 
-        with(binding.recyclerView) {
+        binding.recyclerView.run {
             adapter = ArtListAdapter()
             layoutManager = linearLayoutManager
             addOnScrollListener(recyclerViewOnScrollListener)

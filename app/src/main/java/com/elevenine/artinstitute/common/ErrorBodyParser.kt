@@ -1,4 +1,4 @@
-package com.elevenine.artinstitute.data.common
+package com.elevenine.artinstitute.common
 
 import com.elevenine.artinstitute.data.api.model.response.DefaultErrorResponse
 import kotlinx.serialization.json.Json
