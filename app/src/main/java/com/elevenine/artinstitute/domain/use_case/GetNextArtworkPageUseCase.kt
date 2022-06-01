@@ -10,5 +10,9 @@ import com.elevenine.artinstitute.ui.model.Artwork
  */
 
 interface GetNextArtworkPageUseCase {
-    suspend operator fun invoke(pageNumber: Int, pageSize: Int): DomainResult<DataListPage<Artwork>>
+    suspend operator fun invoke(
+        pageNumber: Int,
+        pageSize: Int,
+        categoryId: Long
+    ): DomainResult<DataListPage<Artwork>>
 }

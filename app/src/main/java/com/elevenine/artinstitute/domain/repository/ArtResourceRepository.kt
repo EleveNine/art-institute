@@ -11,6 +11,10 @@ import com.elevenine.artinstitute.ui.model.Artwork
 
 interface ArtResourceRepository {
 
-    suspend fun fetchArtworkListPage(pageNumber: Int, pageSize: Int): DataResult<DataListPage<Artwork>>
+    suspend fun fetchArtworkListPage(
+        pageNumber: Int,
+        pageSize: Int,
+        categoryId: Long
+    ): DataResult<DataListPage<Artwork>>
 
 }

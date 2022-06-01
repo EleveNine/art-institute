@@ -77,7 +77,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
         // new actual page index is required for requesting new page of data.
         if (currentPage < artworks.size / PAGE_SIZE) currentPage = artworks.size / PAGE_SIZE
 
-        val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE)
+        val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE, categoryId)
 
         return when (result) {
             is DomainResult.Error -> {
@@ -140,7 +140,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
 
         suspend fun fetchTransactions(): DomainResult<Unit> {
             isLoading = true
-            val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE)
+            val result = getNextArtworkPageUseCase.invoke(currentPage, PAGE_SIZE, categoryId)
 
             when (result) {
                 is DomainResult.Error -> {

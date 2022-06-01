@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentCategoriesBinding
+import com.elevenine.artinstitute.utils.applyDefaultInsets
 import com.elevenine.artinstitute.utils.navigateSafely
 import com.elevenine.artinstitute.utils.viewBinding
 import kotlinx.coroutines.flow.collect
@@ -59,9 +60,11 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        applyDefaultInsets(binding.root)
+
         val linearLayoutManager = LinearLayoutManager(requireContext())
 
-        with(binding.recyclerView) {
+        binding.recyclerView.run {
             adapter = CategoriesAdapter { categoryId ->
                 viewModel.onCategoryClicked(categoryId)
             }
