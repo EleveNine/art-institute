@@ -65,12 +65,26 @@ class CategoriesViewModel(private val syncAndGetCategoriesFlowUseCase: SyncAndGe
             currentUiState.copy(toastMessages = messages)
         }
     }
+
+    fun onCategoryClicked(categoryId: Long) {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(clickedCategory = categoryId)
+        }
+    }
+
+    fun onNavigationToArtworksTriggered() {
+        _uiState.update { currentUiState ->
+            currentUiState.copy(clickedCategory = null)
+        }
+    }
 }
 
 
 data class CategoriesUiState(
     val categories: List<Category> = emptyList(),
     val isLoading: Boolean = false,
+
+    val clickedCategory: Long? = null,
 
     /**
      * The list of messages to be shown in the queue

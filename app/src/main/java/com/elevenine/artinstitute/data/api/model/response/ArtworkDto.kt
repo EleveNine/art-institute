@@ -5,20 +5,20 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ArtworkDto(
-    var id: Int? = null,
-    @SerialName("image_id")
-    var imageId: String? = null,
-    var title: String? = null,
-    @SerialName("main_reference_number")
-    var mainReferenceNumber: String? = null,
-    @SerialName("date_display")
-    var dateDisplay: String? = null,
     @SerialName("artist_display")
-    var artistDisplay: String? = null,
+    val artistDisplay: String? = null,
     @SerialName("artist_id")
-    var artistId: Long? = null,
+    val artistId: Long? = null,
     @SerialName("artwork_type_id")
-    var artworkTypeId: String? = null,
+    val artworkTypeId: Int? = null,
     @SerialName("artwork_type_title")
-    var artworkTypeTitle: String? = null
+    val artworkTypeTitle: String? = null,
+    @SerialName("date_display")
+    val dateDisplay: String? = null,
+    val id: Int? = null,
+    @SerialName("image_id")
+    val imageId: String? = null,
+    @SerialName("main_reference_number")
+    val mainReferenceNumber: String? = null,
+    val title: String? = null
 )

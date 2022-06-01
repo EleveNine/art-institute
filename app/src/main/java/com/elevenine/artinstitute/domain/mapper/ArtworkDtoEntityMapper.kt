@@ -1,8 +1,8 @@
 package com.elevenine.artinstitute.domain.mapper
 
 import com.elevenine.artinstitute.data.api.model.response.ArtworkDto
-import com.elevenine.artinstitute.data.database.entity.ArtworkEntity
 import com.elevenine.artinstitute.domain.mapper.base.Mapper
+import com.elevenine.artinstitute.ui.model.Artwork
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -12,18 +12,18 @@ import dagger.assisted.AssistedInject
  * @since 11.01.2022
  */
 
-class ArtworkDtoEntityMapper @AssistedInject constructor(
+class ArtworkDtoUiMapper @AssistedInject constructor(
     @Assisted(ASSISTED_INJECT_FIELD_IIIF_PREFIX) private val imageIiifPrefix: String
-) : Mapper<ArtworkDto, ArtworkEntity> {
+) : Mapper<ArtworkDto, Artwork> {
 
     companion object {
         const val IIIF_PARAMS_PATH = "/full/843,/0/default.jpg"
         const val ASSISTED_INJECT_FIELD_IIIF_PREFIX = "imageIiifPrefix"
     }
 
-    override fun map(input: ArtworkDto): ArtworkEntity {
+    override fun map(input: ArtworkDto): Artwork {
         return with(input) {
-            ArtworkEntity(
+            Artwork(
                 id ?: -1,
                 imageId ?: "",
                 "$imageIiifPrefix/$imageId$IIIF_PARAMS_PATH",
@@ -32,7 +32,7 @@ class ArtworkDtoEntityMapper @AssistedInject constructor(
                 dateDisplay ?: "",
                 artistDisplay ?: "",
                 artistId ?: -1,
-                artworkTypeId ?: "",
+                artworkTypeId.toString(),
                 artworkTypeTitle ?: "",
             )
         }
@@ -40,11 +40,11 @@ class ArtworkDtoEntityMapper @AssistedInject constructor(
 
     /**
      * Due to the necessity to pass the imageIiifPrefix param to the constructor of
-     * [ArtworkDtoEntityMapper] to properly create image urls, it is necessary to implement Dagger's
+     * [ArtworkDtoUiMapper] to properly create image urls, it is necessary to implement Dagger's
      * AssistedFactory.
      */
     @AssistedFactory
     interface Factory {
-        fun create(@Assisted(ASSISTED_INJECT_FIELD_IIIF_PREFIX) imageIiifPrefix: String): ArtworkDtoEntityMapper
+        fun create(@Assisted(ASSISTED_INJECT_FIELD_IIIF_PREFIX) imageIiifPrefix: String): ArtworkDtoUiMapper
     }
 }

@@ -13,10 +13,7 @@ import dagger.Module
 interface UseCaseBindModule {
 
     @Binds
-    fun bindRequestNewArtworkPageUseCase(impl: RequestAndCacheNewArtworkPageUseCaseImpl): RequestAndCacheNewArtworkPageUseCase
-
-    @Binds
-    fun bindGetCachedArtworksFlowUseCase(impl: GetCachedArtworksFlowUseCaseImpl): GetCachedArtworksFlowUseCase
+    fun bindRequestNewArtworkPageUseCase(impl: GetNextArtworkPageUseCaseImpl): GetNextArtworkPageUseCase
 
     @Binds
     fun bindFetchCategoriesUseCase(impl: SyncCategoriesUseCaseImpl): SyncCategoriesUseCase

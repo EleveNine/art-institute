@@ -13,7 +13,8 @@ import com.elevenine.artinstitute.ui.model.Category
  * @since 05.02.2022
  */
 
-class CategoriesAdapter : ListAdapter<Category, CategoryVH>(CategoryDiffUtils()) {
+class CategoriesAdapter(private val onItemClickListener: (categoryId: Long) -> Unit) :
+    ListAdapter<Category, CategoriesAdapter.CategoryVH>(CategoryDiffUtils()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryVH {
         return CategoryVH(
@@ -28,24 +29,29 @@ class CategoriesAdapter : ListAdapter<Category, CategoryVH>(CategoryDiffUtils())
     override fun onBindViewHolder(holder: CategoryVH, position: Int) {
         holder.onBind(currentList[position])
     }
-}
 
-class CategoryDiffUtils : DiffUtil.ItemCallback<Category>() {
+    class CategoryDiffUtils : DiffUtil.ItemCallback<Category>() {
 
-    override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
-        return oldItem.id == newItem.id
+        override fun areItemsTheSame(oldItem: Category, newItem: Category): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
+            return oldItem == newItem
+        }
+
     }
 
-    override fun areContentsTheSame(oldItem: Category, newItem: Category): Boolean {
-        return oldItem == newItem
-    }
+    inner class CategoryVH(private val binding: ItemCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun onBind(category: Category) {
+            binding.run {
+                root.setOnClickListener {
+                    onItemClickListener(category.id.toLong())
+                }
 
-}
-
-class CategoryVH(private val binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
-    fun onBind(category: Category) {
-        with(binding) {
-            tvName.text = category.title
+                tvName.text = category.title
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentArtListBinding
+import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.artworks.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
 import com.elevenine.artinstitute.utils.viewBinding
 import kotlinx.coroutines.flow.collect
@@ -37,7 +38,19 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
 
     private val binding by viewBinding(FragmentArtListBinding::bind)
 
-    private var artworkAdapter: ArtListAdapter? = null
+    private val artListAdapter: ArtListAdapter?
+        get() = binding.recyclerView.adapter as? ArtListAdapter
+
+    /**
+     * Observer that listens to the change in the adapter items. In case new items are added to
+     * the top of the list, then the automatic scroll to the top must take place.
+     */
+    private val artListAdapterDataObserver = object : RecyclerView.AdapterDataObserver() {
+        override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+            if (positionStart == 0) binding.recyclerView.scrollToPosition(0)
+        }
+    }
+
 
     override fun onAttach(context: Context) {
         App.getAppComponent().inject(this)
@@ -73,7 +86,7 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
 
                     if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
                         && firstVisibleItemPosition >= 0
-                        && totalItemCount >= ART_LIST_PAGE_SIZE
+                        && totalItemCount >= FetchPagedArtworksInteractor.PAGE_SIZE
                     ) {
                         viewModel.requestNewPage()
                     }
@@ -81,20 +94,29 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
                 }
             }
 
-        artworkAdapter = ArtListAdapter()
         with(binding.recyclerView) {
-            adapter = artworkAdapter
+            adapter = ArtListAdapter()
             layoutManager = linearLayoutManager
             addOnScrollListener(recyclerViewOnScrollListener)
         }
-
-        viewModel.requestNewPage()
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        artworkAdapter = null
+    override fun onResume() {
+        super.onResume()
+
+        // register the transactionsAdapter observer to scroll to top every time new items are
+        // added to the top of the list
+        artListAdapter?.registerAdapterDataObserver(artListAdapterDataObserver)
     }
+
+    override fun onPause() {
+        super.onPause()
+
+        // unregister the transactionsAdapter observer to avoid losing scroll position on config
+        // change or when navigating back to this Fragment
+        artListAdapter?.unregisterAdapterDataObserver(artListAdapterDataObserver)
+    }
+
 
     private fun handleUiState(uiState: ArtListUiState) {
         /* SHOW UI MESSAGES */
@@ -106,7 +128,7 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
             }
         }
 
-        artworkAdapter?.submitList(uiState.artworks)
+        artListAdapter?.submitList(uiState.artworks)
         binding.pbInitial.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
     }
 }

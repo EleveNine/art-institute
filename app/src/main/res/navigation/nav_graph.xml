@@ -9,12 +9,20 @@
         android:id="@+id/artList"
         android:name="com.elevenine.artinstitute.ui.artworks.ArtListFragment"
         android:label="ArtListFragment"
-        tools:layout="@layout/fragment_art_list" />
+        tools:layout="@layout/fragment_art_list" >
+        <argument
+            android:name="categoryId"
+            app:argType="long" />
+    </fragment>
 
     <fragment
         android:id="@+id/categories"
         android:name="com.elevenine.artinstitute.ui.categories.CategoriesFragment"
         android:label="CategoriesFragment"
-        tools:layout="@layout/fragment_categories" />
+        tools:layout="@layout/fragment_categories" >
+        <action
+            android:id="@+id/action_categories_to_artList"
+            app:destination="@id/artList" />
+    </fragment>
 
 </navigation>

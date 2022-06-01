@@ -3,16 +3,16 @@ package com.elevenine.artinstitute.ui.artworks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.elevenine.artinstitute.common.onError
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
 import com.elevenine.artinstitute.ui.model.UiMessage
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.util.*
 
 /**
  * @author Sherzod Nosirov
@@ -29,42 +29,52 @@ class ArtListViewModel(
         get() = _uiState
 
     init {
-        viewModelScope.launch {
-            fetchPagedArtworksInteractor.initInteractor()
-        }
+        // collect the lists of artwork items emitted by the fetchPagedArtworksInteractor.
+        fetchPagedArtworksInteractor.artworkItemsFlow.onEach { items ->
+            _uiState.update { currentUiState ->
+                currentUiState.copy(artworks = items)
+            }
+        }.launchIn(viewModelScope)
 
-/*        fetchPagedArtworksInteractor.artworkItemsFlow.onEach { domainState ->
-            when (domainState) {
-                is DomainState.Error -> {
-                    _uiState.postValue(
-                        ArtListUiState(
-                            domainState.data ?: emptyList(),
-                            isInitialLoading = false,
-                            showErrorToast = true
+
+        viewModelScope.launch {
+            val result = fetchPagedArtworksInteractor.initInteractor(categoryId)
+
+            result.onError { error ->
+                _uiState.update { currentUiState ->
+                    val toastMessages =
+                        currentUiState.toastMessages + UiMessage(
+                            UUID.randomUUID().mostSignificantBits,
+                            messageResId = error.fallbackMessageId,
+                            message = error.errorMessage
                         )
+
+                    currentUiState.copy(
+                        toastMessages = toastMessages
                     )
-                }
-                is DomainState.Success -> {
-                    _uiState.postValue(
-                        ArtListUiState(
-                            domainState.data,
-                            isInitialLoading = false,
-                            showErrorToast = false
-                        )
-                    )
-                }
-                is DomainState.Loading -> {
-                    val prevState = _uiState.value
-                    val newValue = prevState?.copy(isInitialLoading = true)
-                    newValue?.let { _uiState.postValue(it) }
                 }
             }
-        }.launchIn(viewModelScope)*/
+        }
     }
 
     fun requestNewPage() {
         viewModelScope.launch {
-            fetchPagedArtworksInteractor.requestNextPage()
+            val result = fetchPagedArtworksInteractor.requestNextPage()
+
+            result.onError { error ->
+                _uiState.update { currentUiState ->
+                    val toastMessages =
+                        currentUiState.toastMessages + UiMessage(
+                            UUID.randomUUID().mostSignificantBits,
+                            messageResId = error.fallbackMessageId,
+                            message = error.errorMessage
+                        )
+
+                    currentUiState.copy(
+                        toastMessages = toastMessages
+                    )
+                }
+            }
         }
     }
 

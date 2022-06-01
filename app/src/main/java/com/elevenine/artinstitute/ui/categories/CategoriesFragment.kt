@@ -9,10 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentCategoriesBinding
+import com.elevenine.artinstitute.utils.navigateSafely
 import com.elevenine.artinstitute.utils.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -34,7 +36,8 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
     private val binding by viewBinding(FragmentCategoriesBinding::bind)
 
-    private var categoriesAdapter: CategoriesAdapter? = null
+    private val categoriesAdapter: CategoriesAdapter?
+        get() = binding.recyclerView.adapter as? CategoriesAdapter
 
     override fun onAttach(context: Context) {
         App.getAppComponent().inject(this)
@@ -58,16 +61,12 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
 
         val linearLayoutManager = LinearLayoutManager(requireContext())
 
-        categoriesAdapter = CategoriesAdapter()
         with(binding.recyclerView) {
-            adapter = categoriesAdapter
+            adapter = CategoriesAdapter { categoryId ->
+                viewModel.onCategoryClicked(categoryId)
+            }
             layoutManager = linearLayoutManager
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        categoriesAdapter = null
     }
 
     private fun handleUiState(uiState: CategoriesUiState) {
@@ -83,6 +82,13 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
         categoriesAdapter?.submitList(uiState.categories)
 
         binding.pbInitial.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
+
+        if (uiState.clickedCategory != null) {
+            viewModel.onNavigationToArtworksTriggered()
+            val action =
+                CategoriesFragmentDirections.actionCategoriesToArtList(uiState.clickedCategory)
+            findNavController().navigateSafely(action)
+        }
     }
 
 }
