@@ -2,9 +2,9 @@ package com.elevenine.artinstitute.data.repository
 
 import com.elevenine.artinstitute.data.api.ArtApi
 import com.elevenine.artinstitute.data.api.model.response.CategoryDto
-import com.elevenine.artinstitute.data.common.DataResult
-import com.elevenine.artinstitute.data.common.toApiError
-import com.elevenine.artinstitute.data.common.toDatabaseError
+import com.elevenine.artinstitute.common.DataResult
+import com.elevenine.artinstitute.common.toApiError
+import com.elevenine.artinstitute.common.toDatabaseError
 import com.elevenine.artinstitute.data.database.dao.CategoryDao
 import com.elevenine.artinstitute.data.database.entity.CategoryEntity
 import com.elevenine.artinstitute.di.IoDispatcher

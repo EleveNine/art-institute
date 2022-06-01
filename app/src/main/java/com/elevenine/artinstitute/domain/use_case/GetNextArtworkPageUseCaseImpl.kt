@@ -1,9 +1,8 @@
 package com.elevenine.artinstitute.domain.use_case
 
 import com.elevenine.artinstitute.common.toDomainResult
-import com.elevenine.artinstitute.data.common.DataResult
-import com.elevenine.artinstitute.data.common.EmptyDataError
-import com.elevenine.artinstitute.domain.DomainResult
+import com.elevenine.artinstitute.common.EmptyDataError
+import com.elevenine.artinstitute.common.DomainResult
 import com.elevenine.artinstitute.domain.model.DataListPage
 import com.elevenine.artinstitute.domain.repository.ArtResourceRepository
 import com.elevenine.artinstitute.ui.model.Artwork

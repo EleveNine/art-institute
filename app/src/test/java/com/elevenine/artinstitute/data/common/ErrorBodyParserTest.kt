@@ -1,5 +1,6 @@
 package com.elevenine.artinstitute.data.common
 
+import com.elevenine.artinstitute.common.ErrorBodyParser
 import com.google.common.truth.Truth
 import org.junit.Test
 

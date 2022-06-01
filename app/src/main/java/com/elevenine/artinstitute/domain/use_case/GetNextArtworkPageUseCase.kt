@@ -1,6 +1,6 @@
 package com.elevenine.artinstitute.domain.use_case
 
-import com.elevenine.artinstitute.domain.DomainResult
+import com.elevenine.artinstitute.common.DomainResult
 import com.elevenine.artinstitute.domain.model.DataListPage
 import com.elevenine.artinstitute.ui.model.Artwork
 

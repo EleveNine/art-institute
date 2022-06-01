@@ -1,8 +1,5 @@
 package com.elevenine.artinstitute.common
 
-import com.elevenine.artinstitute.data.common.BaseError
-import com.elevenine.artinstitute.data.common.DataResult
-import com.elevenine.artinstitute.domain.DomainResult
 import com.elevenine.artinstitute.utils.printStackTraceIfDebug
 
 

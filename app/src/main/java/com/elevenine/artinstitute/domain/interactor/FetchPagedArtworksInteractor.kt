@@ -1,6 +1,6 @@
 package com.elevenine.artinstitute.domain.interactor
 
-import com.elevenine.artinstitute.domain.DomainResult
+import com.elevenine.artinstitute.common.DomainResult
 import com.elevenine.artinstitute.ui.model.Artwork
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
 import kotlinx.coroutines.flow.StateFlow

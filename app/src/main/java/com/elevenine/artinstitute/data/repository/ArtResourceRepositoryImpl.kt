@@ -1,8 +1,8 @@
 package com.elevenine.artinstitute.data.repository
 
 import com.elevenine.artinstitute.data.api.ArtApi
-import com.elevenine.artinstitute.data.common.DataResult
-import com.elevenine.artinstitute.data.common.toApiError
+import com.elevenine.artinstitute.common.DataResult
+import com.elevenine.artinstitute.common.toApiError
 import com.elevenine.artinstitute.di.IoDispatcher
 import com.elevenine.artinstitute.domain.mapper.ArtworkDtoUiMapper
 import com.elevenine.artinstitute.domain.mapper.base.ListMapperImpl

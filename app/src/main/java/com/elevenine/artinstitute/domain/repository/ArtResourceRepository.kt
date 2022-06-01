@@ -1,6 +1,6 @@
 package com.elevenine.artinstitute.domain.repository
 
-import com.elevenine.artinstitute.data.common.DataResult
+import com.elevenine.artinstitute.common.DataResult
 import com.elevenine.artinstitute.domain.model.DataListPage
 import com.elevenine.artinstitute.ui.model.Artwork
 
