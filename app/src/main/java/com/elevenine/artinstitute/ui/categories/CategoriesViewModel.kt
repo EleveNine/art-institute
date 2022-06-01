@@ -1,73 +1,91 @@
 package com.elevenine.artinstitute.ui.categories
 
-import androidx.lifecycle.*
-import com.elevenine.artinstitute.domain.DomainState
-import com.elevenine.artinstitute.domain.interactor.GetCategoriesInteractor
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import com.elevenine.artinstitute.common.onError
+import com.elevenine.artinstitute.common.onSuccessSuspend
+import com.elevenine.artinstitute.domain.use_case.SyncAndGetCategoriesFlowUseCase
 import com.elevenine.artinstitute.ui.model.Category
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import com.elevenine.artinstitute.ui.model.UiMessage
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
-class CategoriesViewModel(private val getCategoriesInteractor: GetCategoriesInteractor) :
+class CategoriesViewModel(private val syncAndGetCategoriesFlowUseCase: SyncAndGetCategoriesFlowUseCase) :
     ViewModel() {
 
-    private val _uiState = MutableLiveData<CategoriesUiState>()
-    val uiState: LiveData<CategoriesUiState>
+    private val _uiState = MutableStateFlow(CategoriesUiState())
+    val uiState: StateFlow<CategoriesUiState>
         get() = _uiState
 
     init {
-        viewModelScope.launch { getCategoriesInteractor.initInteractor() }
+        _uiState.update { currentUiState ->
+            currentUiState.copy(isLoading = true)
+        }
 
-        viewModelScope.launch { getCategoriesInteractor.updateCategories() }
+        viewModelScope.launch {
+            val syncResult = syncAndGetCategoriesFlowUseCase()
 
-        getCategoriesInteractor.categoriesFlow.onEach { domainState ->
-            when (domainState) {
-                is DomainState.Error -> {
-                    _uiState.postValue(
-                        CategoriesUiState(
-                            domainState.data ?: emptyList(),
-                            isInitialLoading = false,
-                            showErrorToast = true
-                        )
-                    )
+            syncResult.onSuccessSuspend { flow ->
+                viewModelScope.launch {
+                    flow.collect { list ->
+                        _uiState.update { currentUiState ->
+                            currentUiState.copy(categories = list, isLoading = false)
+                        }
+                    }
                 }
-                is DomainState.Success -> {
-                    _uiState.postValue(
-                        CategoriesUiState(
-                            domainState.data,
-                            isInitialLoading = false,
-                            showErrorToast = false
+            }.onError { error ->
+                _uiState.update { currentUiState ->
+                    val toastMessages =
+                        currentUiState.toastMessages + UiMessage(
+                            UUID.randomUUID().mostSignificantBits,
+                            messageResId = error.fallbackMessageId,
+                            message = error.errorMessage
                         )
-                    )
-                }
-                is DomainState.Loading -> {
-                    val prevState = _uiState.value
-                    val newValue = prevState?.copy(isInitialLoading = true) ?: CategoriesUiState(
-                        listOf(), isInitialLoading = true, showErrorToast = false
-                    )
-                    _uiState.postValue(newValue)
+
+                    currentUiState.copy(isLoading = false, toastMessages = toastMessages)
                 }
             }
-        }.launchIn(viewModelScope)
+        }
+    }
+
+    /**
+     * Call this function when the toast message is shown on the screen.
+     *
+     * @param messageId id of the [UiMessage] that is already shown.
+     */
+    fun onToastMessageShown(messageId: Long) {
+        _uiState.update { currentUiState ->
+            val messages = currentUiState.toastMessages.filterNot { it.id == messageId }
+            currentUiState.copy(toastMessages = messages)
+        }
     }
 }
 
 
 data class CategoriesUiState(
-    val categories: List<Category>,
-    val isInitialLoading: Boolean,
-    val showErrorToast: Boolean
+    val categories: List<Category> = emptyList(),
+    val isLoading: Boolean = false,
+
+    /**
+     * The list of messages to be shown in the queue
+     */
+    val toastMessages: List<UiMessage> = emptyList()
 )
 
 
 class CategoriesViewModelFactory @Inject constructor(
-    private val getCategoriesInteractor: GetCategoriesInteractor
+    private val syncAndGetCategoriesFlowUseCase: SyncAndGetCategoriesFlowUseCase
 ) : ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
         require(modelClass == CategoriesViewModel::class.java)
-        return CategoriesViewModel(getCategoriesInteractor) as T
+        return CategoriesViewModel(syncAndGetCategoriesFlowUseCase) as T
     }
 }

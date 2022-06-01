@@ -1,12 +1,14 @@
 package com.elevenine.artinstitute.domain.interactor
 
 import com.elevenine.artinstitute.data.common.DataResult
-import com.elevenine.artinstitute.domain.DomainState
 import com.elevenine.artinstitute.domain.use_case.GetCachedArtworksFlowUseCase
 import com.elevenine.artinstitute.domain.use_case.RequestAndCacheNewArtworkPageUseCase
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
 import com.elevenine.artinstitute.ui.model.LoadingItem
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 /**
@@ -19,11 +21,11 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
     private val getCachedArtworksFlowUseCase: GetCachedArtworksFlowUseCase,
 ) : FetchPagedArtworksInteractor {
 
-    override val artworkItemsFlow: StateFlow<DomainState<List<ArtworkListItem>>>
+    override val artworkItemsFlow: StateFlow<List<ArtworkListItem>>
         get() = _artworkItemsFlow.asStateFlow()
 
     private val _artworkItemsFlow =
-        MutableStateFlow<DomainState<List<ArtworkListItem>>>(DomainState.Loading())
+        MutableStateFlow<List<ArtworkListItem>>(emptyList())
 
     private var currentPageNumber = 1
 
@@ -40,7 +42,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
                 artworkItems.addAll(artworks)
                 artworkItems.add(LoadingItem(-currentPageNumber))
 
-                _artworkItemsFlow.value = DomainState.Success(artworkItems)
+                _artworkItemsFlow.value = artworkItems
             }
         }
     }
@@ -54,7 +56,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
         if (result is DataResult.Error) {
             if (artworkItems.lastOrNull() is LoadingItem) {
                 artworkItems.dropLast(1)
-                _artworkItemsFlow.value = DomainState.Error(result.error, artworkItems)
+                _artworkItemsFlow.value = listOf()
             }
         } else currentPageNumber++
 

@@ -6,11 +6,16 @@ import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentCategoriesBinding
 import com.elevenine.artinstitute.utils.viewBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -39,8 +44,12 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.uiState.observe(this) { state ->
-            handleUiState(state)
+        lifecycleScope.launch {
+            viewModel.uiState
+                .flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
+                .collect {
+                    handleUiState(it)
+                }
         }
     }
 
@@ -61,14 +70,19 @@ class CategoriesFragment : Fragment(R.layout.fragment_categories) {
         categoriesAdapter = null
     }
 
-    private fun handleUiState(state: CategoriesUiState) {
-        categoriesAdapter?.submitList(state.categories)
-
-        binding.pbInitial.visibility = if (state.isInitialLoading) View.VISIBLE else View.GONE
-
-        if (state.showErrorToast) {
-            Toast.makeText(requireContext(), "An error occurred", Toast.LENGTH_SHORT).show()
+    private fun handleUiState(uiState: CategoriesUiState) {
+        /* SHOW UI MESSAGES */
+        if (uiState.toastMessages.isNotEmpty()) {
+            uiState.toastMessages.forEach {
+                val message = it.message ?: getString(it.messageResId)
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                viewModel.onToastMessageShown(it.id)
+            }
         }
+
+        categoriesAdapter?.submitList(uiState.categories)
+
+        binding.pbInitial.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
     }
 
 }

@@ -1,20 +1,19 @@
 package com.elevenine.artinstitute.data.api.model.response
 
-import androidx.annotation.Keep
-import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
-@Keep
-class CategoryDto(
+@Serializable
+data class CategoryDto(
     var id: Int?,
-    @Json(name = "api_model")
+    @SerialName("api_model")
     var apiModel: String?,
-    @Json(name = "api_link")
+    @SerialName("api_link")
     var apiLink: String?,
     var title: String?,
-    @Json(name = "last_updated_source")
+    @SerialName("last_updated_source")
     var lastUpdatedSource: String?,
-    @Json(name = "last_updated")
+    @SerialName("last_updated")
     var lastUpdated: String?,
     var timestamp: String?
 )

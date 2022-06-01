@@ -1,6 +1,7 @@
 package com.elevenine.artinstitute.data.common
 
 import com.elevenine.artinstitute.data.api.model.response.DefaultErrorResponse
+import kotlinx.serialization.json.Json
 import org.json.JSONObject
 
 /**
@@ -9,30 +10,14 @@ import org.json.JSONObject
  */
 
 /**
- * Class that realises 'Command' pattern to perform Http ErrorBody parsing.
+ * Special command class that acts as a parser that decodes the JSON response received from the
+ * remote API.
  */
 class ErrorBodyParser {
 
-    /**
-     * Parses the provided Http ErrorBody into [DefaultErrorResponse] object.
-     *
-     * @param body ErrorBody in string type to parse.
-     *
-     * @return an instance of [DefaultErrorResponse] that contains the parsed data.
-     */
-    operator fun invoke(body: String?): DefaultErrorResponse {
-        val defaultErrorResponse = DefaultErrorResponse()
-
-        if (body == null) return defaultErrorResponse
-
-        val jsonObject = JSONObject(body)
-
-        with(defaultErrorResponse) {
-            status = jsonObject.optInt("status")
-            error = jsonObject.optString("error")
-            detail = jsonObject.optString("detail")
-        }
-
-        return defaultErrorResponse
+    operator fun invoke(
+        errorBody: String?,
+    ): DefaultErrorResponse {
+        return Json.decodeFromString(DefaultErrorResponse.serializer(), errorBody ?: "")
     }
 }

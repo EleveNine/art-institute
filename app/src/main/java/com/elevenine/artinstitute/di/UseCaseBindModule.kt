@@ -19,8 +19,11 @@ interface UseCaseBindModule {
     fun bindGetCachedArtworksFlowUseCase(impl: GetCachedArtworksFlowUseCaseImpl): GetCachedArtworksFlowUseCase
 
     @Binds
-    fun bindFetchCategoriesUseCase(impl: FetchCategoriesUseCaseImpl): FetchCategoriesAndCacheUseCase
+    fun bindFetchCategoriesUseCase(impl: SyncCategoriesUseCaseImpl): SyncCategoriesUseCase
 
     @Binds
     fun bindGetCachedCategoriesFlowUseCase(impl: GetCachedCategoriesFlowUseCaseImpl): GetCachedCategoriesFlowUseCase
+
+    @Binds
+    fun bindSyncAndGetCategoriesFlowUseCase(impl: SyncAndGetCategoriesFlowUseCaseImpl): SyncAndGetCategoriesFlowUseCase
 }

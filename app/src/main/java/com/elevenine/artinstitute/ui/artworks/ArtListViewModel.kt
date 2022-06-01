@@ -1,14 +1,17 @@
 package com.elevenine.artinstitute.ui.artworks
 
-import androidx.lifecycle.*
-import com.elevenine.artinstitute.domain.DomainState
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
 import com.elevenine.artinstitute.ui.model.ArtworkListItem
+import com.elevenine.artinstitute.ui.model.UiMessage
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 /**
@@ -21,8 +24,8 @@ class ArtListViewModel(
     private val fetchPagedArtworksInteractor: FetchPagedArtworksInteractor
 ) : ViewModel() {
 
-    private val _uiState = MutableLiveData<ArtListUiState>()
-    val uiState: LiveData<ArtListUiState>
+    private val _uiState = MutableStateFlow(ArtListUiState())
+    val uiState: StateFlow<ArtListUiState>
         get() = _uiState
 
     init {
@@ -30,7 +33,7 @@ class ArtListViewModel(
             fetchPagedArtworksInteractor.initInteractor()
         }
 
-        fetchPagedArtworksInteractor.artworkItemsFlow.onEach { domainState ->
+/*        fetchPagedArtworksInteractor.artworkItemsFlow.onEach { domainState ->
             when (domainState) {
                 is DomainState.Error -> {
                     _uiState.postValue(
@@ -56,12 +59,24 @@ class ArtListViewModel(
                     newValue?.let { _uiState.postValue(it) }
                 }
             }
-        }.launchIn(viewModelScope)
+        }.launchIn(viewModelScope)*/
     }
 
     fun requestNewPage() {
         viewModelScope.launch {
             fetchPagedArtworksInteractor.requestNextPage()
+        }
+    }
+
+    /**
+     * Call this function when the toast message is shown on the screen.
+     *
+     * @param messageId id of the [UiMessage] that is already shown.
+     */
+    fun onToastMessageShown(messageId: Long) {
+        _uiState.update { currentUiState ->
+            val messages = currentUiState.toastMessages.filterNot { it.id == messageId }
+            currentUiState.copy(toastMessages = messages)
         }
     }
 
@@ -71,9 +86,13 @@ class ArtListViewModel(
 }
 
 data class ArtListUiState(
-    val artworks: List<ArtworkListItem>,
-    val isInitialLoading: Boolean,
-    val showErrorToast: Boolean
+    val artworks: List<ArtworkListItem> = emptyList(),
+    val isLoading: Boolean = false,
+
+    /**
+     * The list of messages to be shown in the queue
+     */
+    val toastMessages: List<UiMessage> = emptyList()
 )
 
 

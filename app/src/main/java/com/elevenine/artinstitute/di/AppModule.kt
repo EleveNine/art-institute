@@ -9,14 +9,16 @@ import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.BuildConfig
 import com.elevenine.artinstitute.data.api.ArtApi
 import com.elevenine.artinstitute.data.api.ArtApi.Companion.BASE_URL
-import com.squareup.moshi.Moshi
-import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
 import javax.inject.Singleton
@@ -76,10 +78,10 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideApi(moshi: Moshi, okHttpClient: OkHttpClient): ArtApi {
+    fun provideApi(okHttpClient: OkHttpClient, converterFactory: Converter.Factory): ArtApi {
         val retrofit: Retrofit = Retrofit.Builder()
             .baseUrl(BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi).asLenient())
+            .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
         return retrofit.create(ArtApi::class.java)
@@ -116,8 +118,17 @@ class ApiModule {
             .build()
     }
 
+    /**
+     * Provides custom Kotlinx Serialization Converter Factory that is used by Retrofit2.
+     */
     @Provides
-    fun provideMoshi(): Moshi = Moshi.Builder()
-        .add(KotlinJsonAdapterFactory())
-        .build()
+    @Singleton
+    @OptIn(ExperimentalSerializationApi::class)
+    fun provideKotlinxSerializationConverterFactory(): Converter.Factory {
+        val contentType = "application/json".toMediaType()
+
+        return Json {
+            ignoreUnknownKeys = true
+        }.asConverterFactory(contentType)
+    }
 }

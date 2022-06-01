@@ -1,9 +1,9 @@
 package com.elevenine.artinstitute.data.api.model.response
 
-import androidx.annotation.Keep
+import kotlinx.serialization.Serializable
 
-@Keep
-class DefaultErrorResponse(
+@Serializable
+data class DefaultErrorResponse(
     var status: Int? = null,
     var error: String? = null,
     var detail: String? = null

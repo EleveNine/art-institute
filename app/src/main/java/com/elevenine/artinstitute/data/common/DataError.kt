@@ -2,139 +2,182 @@ package com.elevenine.artinstitute.data.common
 
 import androidx.annotation.StringRes
 import com.elevenine.artinstitute.R
-import com.elevenine.artinstitute.data.api.model.response.DefaultErrorResponse
 import retrofit2.HttpException
 
 /**
  * @author Sherzod Nosirov
- * @since July 30, 2021
+ * @since 16.02.2022
  */
 
 /**
  * The base class for wrapping various errors that may occur in the data-layer of the app. This
- * class encapsulates the exception occurred in the data-layer, as well as additional info.
+ * class encapsulates an exception occurred in the data-layer, as well as some additional info.
  *
  * @param internalException the exception occurred in the data-layer.
  *
- * @param errorTitleId the resource ID of the title of the error that relates to the occurred
- * exception. This resId is used in an ExceptionHandler and is shown as a primary error message in
- * the UI.
- *
- * @param errorMessageId optional extra errorMessage resId.
+ * @param fallbackMessageId fallback message resId in case there is not any provided by the data
+ * layer into the [errorMessage] field.
  *
  * @param errorMessage optional extra string value to act as an error description. Usually it
- * contains a message obtained from [DefaultErrorResponse] parsed by [ErrorBodyParser].
+ * contains a message obtained from API error response.
  */
-open class BaseError(
+abstract class BaseError(
     var internalException: Throwable,
-    @StringRes var errorTitleId: Int,
-    @StringRes var errorMessageId: Int?,
+    @StringRes var fallbackMessageId: Int,
     var errorMessage: String?,
 ) : Exception(internalException.message, internalException)
 
 
 /**
- * An error wrapper class that represents an Api error which was got from 4** status. This statuses
- * mean an error received from the backend and must be handled with the Error State in the
- * UI. In most cases the [DefaultErrorResponse] body of the obtained from the API response contains
- * an errorMessage that should be shown in the ErrorDialog in addition to the [errorTitleId].
+ * An error wrapper class that represents an API error which was got from a 4XX status. These
+ * statuses indicate an error received from the backend and must be handled with the Error State in
+ * the UI. In most cases the error body of the API response contains an errorMessage that should be
+ * shown in the UI.
  *
  * @param exception the instance of [HttpException] occurred in the data-layer.
  *
- * @param errorTitleResId the resource ID of the title of the error that relates to the occurred
- * exception. This resId is used in an ExceptionHandler and is shown as a primary error message in
- * the UI.
- *
- * @param errorMessageId optional extra errorMessage resId.
- *
- * @param errorMessage optional extra string value to act as an error description. Usually it
- * contains a message obtained from [DefaultErrorResponse] parsed by [ErrorBodyParser].
+ * @param fallbackMessageId fallback message resId in case there is not any provided by the data
+ * layer into the [errorMessage] object field.
  */
-class ApiError(
+abstract class ApiError(
     exception: HttpException,
-    @StringRes errorTitleResId: Int = R.string.error_http,
-    @StringRes errorMessageId: Int? = null,
-    errorMessage: String? = null,
+    errorMessage: String?,
+    @StringRes fallbackMessageId: Int,
 ) : BaseError(
     exception,
-    errorTitleId = errorTitleResId,
-    errorMessageId = errorMessageId,
-    errorMessage = errorMessage
+    fallbackMessageId,
+    errorMessage
 )
 
+class ClientError(
+    exception: HttpException,
+    errorMessage: String?,
+    @StringRes fallbackMessageId: Int,
+) : ApiError(exception, errorMessage, fallbackMessageId)
+
 /**
- * An error wrapper class that represents an Api 5** Server errors. This status may indicate the
- * problems with the server and must be handled accordingly. In some cases the
- * [DefaultErrorResponse] body of the obtained from the API response may contain
- * an errorMessage that should be shown in the Error State in addition to the [errorTitleId].
+ * An error wrapper class that represents an API error which was got from a 401 status. This
+ * status code indicates an auth error when accessing the protected methods of the API. Receiving
+ * this error means that the user is no longer authorized in the app and the automatic logout must
+ * take place.
+ * In most cases the error body of the API response contains an errorMessage that should be
+ * shown in the UI.
  *
  * @param exception the instance of [HttpException] occurred in the data-layer.
  *
- * @param errorTitleResId the resource ID of the title of the error that relates to the occurred
- * exception. This resId is used in an ExceptionHandler and is shown as a primary error message in
- * the UI.
+ * @param fallbackMessageId fallback message resId in case there is not any provided by the data
+ * layer into the [errorMessage] object field.
+ */
+class UnauthorizedError(
+    exception: HttpException,
+    errorMessage: String?,
+    @StringRes fallbackMessageId: Int,
+) : ApiError(exception, errorMessage, fallbackMessageId)
+
+/**
+ * An error wrapper class that represents an API 5XX Server errors. This status may indicate the
+ * problems with the server and must be handled accordingly. In some cases the
+ * response body of the obtained from the API response may contain an errorMessage that should be
+ * shown in the UI's Error State.
  *
- * @param errorMessageId optional extra errorMessage resId.
+ * @param exception the instance of [HttpException] occurred in the data-layer.
+ *
+ * @param fallbackMessageId fallback message resId in case there is not any provided by the data
+ * layer into the [errorMessage] field.
  *
  * @param errorMessage optional extra string value to act as an error description. Usually it
- * contains a message obtained from [DefaultErrorResponse] parsed by [ErrorBodyParser].
+ * contains a message obtained from API error response.
  */
 class ServerError(
     exception: HttpException,
-    @StringRes errorTitleResId: Int = R.string.error_http,
-    @StringRes errorMessageId: Int? = null,
+    @StringRes fallbackMessageId: Int,
     errorMessage: String? = null,
 ) : BaseError(
     exception,
-    errorTitleId = errorTitleResId,
-    errorMessageId = errorMessageId,
-    errorMessage = errorMessage
+    fallbackMessageId,
+    errorMessage
 )
 
-
+/**
+ * An error wrapper class that represents errors occurred with the connection to the internet.
+ *
+ * @param exception the instance of [Throwable] occurred in the data-layer.
+ *
+ * @param fallbackMessageId fallback message resId that describes the error.
+ */
 class NoConnectionError(
-    exception: Exception,
-    @StringRes errorTitleResId: Int = R.string.error_http,
-    @StringRes errorMessageId: Int? = null,
-    errorMessage: String? = null,
+    exception: Throwable,
+    @StringRes fallbackMessageId: Int,
 ) : BaseError(
     exception,
-    errorTitleId = errorTitleResId,
-    errorMessageId = errorMessageId,
-    errorMessage = errorMessage
+    fallbackMessageId,
+    null
 )
 
-
+/**
+ * An error wrapper class that represents errors occurred during accessing the Android Room.
+ *
+ * @param exception the instance of [Throwable] occurred in the data-layer.
+ *
+ * @param fallbackMessageId fallback message resId that describes the error.
+ */
 class DatabaseError(
     exception: Throwable,
-    @StringRes errorTitleResId: Int? = null
+    @StringRes fallbackMessageId: Int,
 ) : BaseError(
     exception,
-    errorTitleId = errorTitleResId ?: R.string.error_generic_database,
-    errorMessageId = null,
-    errorMessage = null
+    fallbackMessageId,
+    null
 )
 
-
+/**
+ * An error wrapper class that represents undefined errors during some data or business logic
+ * operations.
+ *
+ * @param exception the instance of [Throwable] occurred in the data-layer.
+ *
+ * @param fallbackMessageId fallback message resId that describes the error.
+ */
 class UnknownError(
     exception: Throwable,
-    @StringRes errorTitleId: Int? = null,
+    @StringRes fallbackMessageId: Int,
     errorMessage: String? = null,
 ) : BaseError(
     exception,
-    errorTitleId = errorTitleId ?: R.string.error_unknown,
-    errorMessageId = null,
-    errorMessage = errorMessage
+    fallbackMessageId,
+    errorMessage
 )
 
-
+/**
+ * An error wrapper class that represents the cases when the empty data set was returned from the
+ * data layer. This type of error may be especially useful when working with paginated data.
+ *
+ * @param exception the instance of [Throwable] occurred in the data-layer.
+ *
+ * @param errorMessageId error message resId that describes the error.
+ */
 class EmptyDataError(
     exception: Throwable = NullPointerException(),
-    @StringRes errorTitleId: Int? = null,
-    errorMessage: String? = null,
+    @StringRes errorMessageId: Int = R.string.error_emptyData,
 ) : BaseError(
     exception,
-    errorTitleId = errorTitleId ?: R.string.error_empty_data,
-    errorMessageId = null,
-    errorMessage = errorMessage
+    errorMessageId,
+    null
+)
+
+/**
+ * An error wrapper class that represents processing errors that occurred during some operations in
+ * either the domain or the data layers of the app.
+ *
+ * @param exception the instance of [Throwable] occurred in the data-layer.
+ *
+ * @param fallbackMessageId fallback message resId that describes the error.
+ */
+class ProcessError(
+    exception: Throwable = IllegalStateException(),
+    @StringRes fallbackMessageId: Int = R.string.error_processing,
+) : BaseError(
+    exception,
+    fallbackMessageId,
+    null
 )

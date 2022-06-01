@@ -4,11 +4,7 @@ import com.elevenine.artinstitute.domain.DomainResult
 import com.elevenine.artinstitute.ui.model.Category
 import kotlinx.coroutines.flow.Flow
 
-/**
- * @author Sherzod Nosirov
- * @since 05.02.2022
- */
+interface SyncAndGetCategoriesFlowUseCase {
 
-interface GetCachedCategoriesFlowUseCase {
     suspend operator fun invoke(): DomainResult<Flow<List<Category>>>
 }
