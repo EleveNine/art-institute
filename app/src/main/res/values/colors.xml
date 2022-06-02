@@ -15,4 +15,8 @@
     <!-- Standard colors -->
     <color name="color_white">#FFFFFF</color>
     <color name="color_transparent">#00000000</color>
+
+
+    <color name="color_text_primary_light">#CDCDCD</color>
+    <color name="color_text_primary_dark">#1E1E1E</color>
 </resources>

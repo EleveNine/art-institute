@@ -13,6 +13,11 @@
         <item name="colorOnSurface">@color/color_text_primary_light</item>
 
         <!-- Status bar color. -->
-        <item name="android:statusBarColor" >@color/color_transparent</item>
+        <item name="android:statusBarColor">@color/color_transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+        <!-- Nav bar color-->
+        <item name="android:navigationBarColor">@color/color_transparent</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 </resources>
