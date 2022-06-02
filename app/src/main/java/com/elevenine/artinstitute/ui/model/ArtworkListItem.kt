@@ -12,6 +12,4 @@ interface ArtworkListItem {
     val id: Int
 
     val viewType: Int
-
-    fun callDataEquals(item: ArtworkListItem): Boolean
 }

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="TextStyleMedium10">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium11">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium13">
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium15">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium16">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium18">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium20">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium24">
+        <item name="android:textSize">24sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleMedium32">
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_medium</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+
+    <style name="TextStyleRegular11">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular13">
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular15">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular16">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular18">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleRegular20">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+
+    <style name="TextStyleBold10">
+        <item name="android:textSize">10sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+    <style name="TextStyleBold11">
+        <item name="android:textSize">11sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold12">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold13">
+        <item name="android:textSize">13sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold14">
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold15">
+        <item name="android:textSize">15sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold16">
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold18">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold20">
+        <item name="android:textSize">20sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+    <style name="TextStyleBold32">
+        <item name="android:textSize">32sp</item>
+        <item name="android:fontFamily">@font/alegreya_sans_sc_bold</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
+    </style>
+
+</resources>

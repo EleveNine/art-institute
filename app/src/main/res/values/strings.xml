@@ -8,4 +8,5 @@
     <string name="error_criticalServerConnection">Unable to connect to the server</string>
     <string name="error_emptyData">Data set is empty</string>
     <string name="error_processing">"An error occurred while processing "</string>
+    <string name="categories_titleArtworkCategories">Artwork Categories</string>
 </resources>

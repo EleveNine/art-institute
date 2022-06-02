@@ -97,7 +97,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
             is DomainResult.Success -> {
                 isLoading = false
 
-                artworks += result.data.list
+                artworks += result.data.list.filter { it.imageId != null }
 
                 if (currentPage == 1 && result.data.list.isEmpty()) {
                     // if the first page is already empty, stop fetching process
@@ -148,7 +148,7 @@ class FetchPagedArtworksInteractorImpl @Inject constructor(
                     return result
                 }
                 is DomainResult.Success -> {
-                    val fetchedList = result.data.list
+                    val fetchedList = result.data.list.filter { it.imageId != null }
 
                     val lastFetchedItem = fetchedList.lastOrNull()
 
