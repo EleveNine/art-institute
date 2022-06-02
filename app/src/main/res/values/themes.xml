@@ -14,6 +14,9 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/color_transparent</item>
-        <!-- Customize your theme here. -->
+        <item name="android:windowLightStatusBar">true</item>
+
+        <!-- Nav bar color-->
+        <item name="android:navigationBarColor">@color/black</item>
     </style>
 </resources>

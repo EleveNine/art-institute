@@ -17,7 +17,7 @@ class ArtworkDtoUiMapper @AssistedInject constructor(
 ) : Mapper<ArtworkDto, Artwork> {
 
     companion object {
-        const val IIIF_PARAMS_PATH = "/full/843,/0/default.jpg"
+        const val IIIF_PARAMS_PATH = "/full/200,/0/default.jpg"
         const val ASSISTED_INJECT_FIELD_IIIF_PREFIX = "imageIiifPrefix"
     }
 

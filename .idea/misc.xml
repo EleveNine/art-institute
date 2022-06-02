@@ -5,8 +5,10 @@
       <map>
         <entry key="..\:/Users/Sherzod/AndroidStudioProjects/ArtInstituteApp/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/Sherzod/AndroidStudioProjects/ArtInstituteApp/app/src/main/res/layout/fragment_art_list.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/sheri/AndroidStudioProjects/art-institute/app/src/main/res/drawable/bg_divider.xml" value="0.1345" />
         <entry key="..\:/Users/sheri/AndroidStudioProjects/art-institute/app/src/main/res/layout/fragment_art_list.xml" value="0.31296296296296294" />
         <entry key="..\:/Users/sheri/AndroidStudioProjects/art-institute/app/src/main/res/layout/fragment_categories.xml" value="0.17559523809523808" />
+        <entry key="..\:/Users/sheri/AndroidStudioProjects/art-institute/app/src/main/res/layout/item_artwork.xml" value="0.32314814814814813" />
         <entry key="..\:/Users/sheri/AndroidStudioProjects/art-institute/app/src/main/res/layout/item_category.xml" value="0.31296296296296294" />
       </map>
     </option>

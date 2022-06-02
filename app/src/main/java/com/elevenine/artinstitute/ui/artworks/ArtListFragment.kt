@@ -4,20 +4,24 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentArtListBinding
-import com.elevenine.artinstitute.domain.interactor.FetchPagedArtworksInteractor
-import com.elevenine.artinstitute.ui.artworks.ArtListViewModel.Companion.ART_LIST_PAGE_SIZE
-import com.elevenine.artinstitute.utils.applyDefaultInsets
+import com.elevenine.artinstitute.ui.list.adapter.ArtListAdapter
+import com.elevenine.artinstitute.ui.list.item_decorations.SpaceHorizontalDividerDecoration
+import com.elevenine.artinstitute.ui.list.item_decorations.SpaceVerticalDividerDecoration
+import com.elevenine.artinstitute.utils.dp
 import com.elevenine.artinstitute.utils.viewBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -75,24 +79,28 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        applyDefaultInsets(binding.root)
+        applyFullScreenInsets()
 
-        val linearLayoutManager = LinearLayoutManager(requireContext())
+        val gridLayoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        gridLayoutManager.gapStrategy = StaggeredGridLayoutManager.GAP_HANDLING_NONE
 
         val recyclerViewOnScrollListener: RecyclerView.OnScrollListener =
             object : RecyclerView.OnScrollListener() {
-
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    val visibleItemCount: Int = linearLayoutManager.childCount
-                    val totalItemCount: Int = linearLayoutManager.itemCount
-                    val firstVisibleItemPosition: Int =
-                        linearLayoutManager.findFirstVisibleItemPosition()
 
-                    if (visibleItemCount + firstVisibleItemPosition >= totalItemCount
-                        && firstVisibleItemPosition >= 0
-                        && totalItemCount >= FetchPagedArtworksInteractor.PAGE_SIZE
-                    ) {
+                    val visibleItemCount = gridLayoutManager.childCount
+                    val totalItemCount = gridLayoutManager.itemCount
+                    var firstVisibleItems: IntArray? = null
+
+                    firstVisibleItems =
+                        gridLayoutManager.findFirstVisibleItemPositions(firstVisibleItems)
+
+                    var pastVisibleItems = 0
+                    if (firstVisibleItems != null && firstVisibleItems.isNotEmpty()) {
+                        pastVisibleItems = firstVisibleItems[0]
+                    }
+                    if (visibleItemCount + pastVisibleItems >= totalItemCount) {
                         viewModel.requestNewPage()
                     }
 
@@ -101,8 +109,10 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
 
         binding.recyclerView.run {
             adapter = ArtListAdapter()
-            layoutManager = linearLayoutManager
+            layoutManager = gridLayoutManager
             addOnScrollListener(recyclerViewOnScrollListener)
+            addItemDecoration(SpaceVerticalDividerDecoration(8.dp))
+            addItemDecoration(SpaceHorizontalDividerDecoration(8.dp))
         }
     }
 
@@ -122,6 +132,11 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
         artListAdapter?.unregisterAdapterDataObserver(artListAdapterDataObserver)
     }
 
+    override fun onDestroyView() {
+        ViewCompat.setOnApplyWindowInsetsListener(requireActivity().window.decorView, null)
+        super.onDestroyView()
+    }
+
 
     private fun handleUiState(uiState: ArtListUiState) {
         /* SHOW UI MESSAGES */
@@ -135,5 +150,18 @@ class ArtListFragment : Fragment(R.layout.fragment_art_list) {
 
         artListAdapter?.submitList(uiState.artworks)
         binding.pbInitial.visibility = if (uiState.isLoading) View.VISIBLE else View.GONE
+    }
+
+
+    private fun applyFullScreenInsets() {
+        ViewCompat.setOnApplyWindowInsetsListener(requireActivity().window.decorView) { _, insets ->
+
+            val statusBarHeight = insets.getInsets(WindowInsetsCompat.Type.statusBars()).top
+            val navBarHeight = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom
+
+            binding.recyclerView.updatePadding(0, statusBarHeight, 0, navBarHeight + 16.dp)
+
+            insets
+        }
     }
 }

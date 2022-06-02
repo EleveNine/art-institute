@@ -22,8 +22,4 @@ data class Artwork(
 
     override val viewType: Int
         get() = R.layout.item_artwork
-
-    override fun callDataEquals(item: ArtworkListItem): Boolean {
-        return item is Artwork && this == item
-    }
 }

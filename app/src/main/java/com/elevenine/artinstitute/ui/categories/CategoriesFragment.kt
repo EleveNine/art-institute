@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.elevenine.artinstitute.App
 import com.elevenine.artinstitute.R
 import com.elevenine.artinstitute.databinding.FragmentCategoriesBinding
+import com.elevenine.artinstitute.ui.list.adapter.CategoriesAdapter
 import com.elevenine.artinstitute.utils.applyDefaultInsets
 import com.elevenine.artinstitute.utils.navigateSafely
 import com.elevenine.artinstitute.utils.viewBinding

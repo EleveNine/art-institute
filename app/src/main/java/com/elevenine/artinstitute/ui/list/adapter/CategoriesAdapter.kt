@@ -1,4 +1,4 @@
-package com.elevenine.artinstitute.ui.categories
+package com.elevenine.artinstitute.ui.list.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
