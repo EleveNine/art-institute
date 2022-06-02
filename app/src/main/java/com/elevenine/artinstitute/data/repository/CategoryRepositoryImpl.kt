@@ -1,14 +1,15 @@
 package com.elevenine.artinstitute.data.repository
 
-import com.elevenine.artinstitute.data.api.ArtApi
-import com.elevenine.artinstitute.data.api.model.response.CategoryDto
 import com.elevenine.artinstitute.common.DataResult
 import com.elevenine.artinstitute.common.toApiError
 import com.elevenine.artinstitute.common.toDatabaseError
+import com.elevenine.artinstitute.data.api.ArtApi
+import com.elevenine.artinstitute.data.api.model.response.CategoryDto
 import com.elevenine.artinstitute.data.database.dao.CategoryDao
 import com.elevenine.artinstitute.data.database.entity.CategoryEntity
 import com.elevenine.artinstitute.di.IoDispatcher
 import com.elevenine.artinstitute.domain.repository.CategoryRepository
+import com.elevenine.artinstitute.utils.tryCatchSafelySuspend
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
@@ -27,36 +28,36 @@ class CategoryRepositoryImpl @Inject constructor(
 
     override suspend fun fetchCategories(): DataResult<List<CategoryDto>> {
         return withContext(ioDispatcher) {
-            try {
+            tryCatchSafelySuspend(tryBlock = suspend {
                 val result = artApi.getArtworkTypes()
 
-                return@withContext DataResult.Success(result.data)
-            } catch (e: Exception) {
-                return@withContext DataResult.Error(e.toApiError())
-            }
+                DataResult.Success(result.data)
+            }, catchBlock = { e ->
+                DataResult.Error(e.toApiError())
+            })
         }
     }
 
     override suspend fun cacheCategories(categories: List<CategoryEntity>): DataResult<Unit> {
         return withContext(ioDispatcher) {
-            try {
+            tryCatchSafelySuspend(tryBlock = suspend {
                 categoryDao.insertCategories(categories)
 
-                return@withContext DataResult.Success(Unit)
-            } catch (e: Exception) {
-                return@withContext DataResult.Error(e.toApiError())
-            }
+                DataResult.Success(Unit)
+            }, catchBlock = { e ->
+                DataResult.Error(e.toApiError())
+            })
         }
     }
 
     override suspend fun getCachedCategoriesFlow(): DataResult<Flow<List<CategoryEntity>>> {
         return withContext(ioDispatcher) {
-            try {
+            tryCatchSafelySuspend(tryBlock = suspend {
                 val flow = categoryDao.getCategoriesFlow()
-                return@withContext DataResult.Success(flow)
-            } catch (e: Exception) {
-                return@withContext DataResult.Error(e.toDatabaseError())
-            }
+                DataResult.Success(flow)
+            }, catchBlock = { e ->
+                DataResult.Error(e.toDatabaseError())
+            })
         }
     }
 }

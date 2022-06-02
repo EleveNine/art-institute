@@ -10,6 +10,7 @@ import com.elevenine.artinstitute.domain.mapper.base.ListMapperImpl
 import com.elevenine.artinstitute.domain.model.DataListPage
 import com.elevenine.artinstitute.domain.repository.ArtResourceRepository
 import com.elevenine.artinstitute.ui.model.Artwork
+import com.elevenine.artinstitute.utils.tryCatchSafelySuspend
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -32,7 +33,7 @@ class ArtResourceRepositoryImpl @Inject constructor(
     ): DataResult<DataListPage<Artwork>> {
 
         return withContext(ioDispatcher) {
-            try {
+            tryCatchSafelySuspend(tryBlock = suspend {
                 val requestBody = GetCategorizedArtworksRequest.getInstance(categoryId)
                 val result = artApi.getCategorizedArtworksByPage(requestBody, pageNumber, pageSize)
 
@@ -43,15 +44,15 @@ class ArtResourceRepositoryImpl @Inject constructor(
                     (result.pagination?.currentPage
                         ?: Int.MAX_VALUE) < (result.pagination?.totalPages ?: Int.MIN_VALUE)
 
-                return@withContext DataResult.Success(
+                DataResult.Success(
                     DataListPage(
                         hasNextPage,
                         ListMapperImpl(artworkDtoEntityMapper).map(result.data)
                     )
                 )
-            } catch (e: Exception) {
-                return@withContext DataResult.Error(e.toApiError())
-            }
+            }, catchBlock = { e ->
+                DataResult.Error(e.toApiError())
+            })
         }
     }
 }
