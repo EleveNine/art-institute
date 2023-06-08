@@ -5,15 +5,15 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CategoryDto(
-    var id: Int?,
+    var id: Int? = null,
     @SerialName("api_model")
-    var apiModel: String?,
+    var apiModel: String? = null,
     @SerialName("api_link")
-    var apiLink: String?,
-    var title: String?,
+    var apiLink: String? = null,
+    var title: String? = null,
     @SerialName("last_updated_source")
-    var lastUpdatedSource: String?,
+    var lastUpdatedSource: String? = null,
     @SerialName("last_updated")
-    var lastUpdated: String?,
-    var timestamp: String?
+    var lastUpdated: String? = null,
+    var timestamp: String? = null
 )
