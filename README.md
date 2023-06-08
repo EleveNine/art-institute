@@ -3,8 +3,6 @@ Simple test project with Clean Architecture, MVVM + UiState, Kotlin Coroutines a
 
 Based on the public API provided by the Art Institute of Chicago: [API Docs Link](https://api.artic.edu/docs/#introduction)
 
-Consider this project as demonstration of known technologies and methodologies. 
-
 
 ## Main highlights:
 
